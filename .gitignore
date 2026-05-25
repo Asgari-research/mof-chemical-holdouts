@@ -70,3 +70,43 @@ temp/
 *.tar
 *.tar.gz
 !release/*.zip
+
+
+```gitignore
+# Raw ARC-MOF / local database files
+clean_data.csv
+geo-clusters.csv
+mc-clusters.csv
+func-clusters.csv
+flig-clusters.csv
+geometric_properties.csv
+all_topology_lists.csv
+post_comb_vsa-CO2.csv
+methane.csv
+data/raw/
+data/interim/
+data/processed/
+
+# Heavy generated outputs
+paper1_split_strategy_outputs_*/
+global_results/predictions/
+*_predictions.csv
+prediction_file_registry.csv
+sampled_fold_predictions_for_figures.csv
+*.joblib
+*.pkl
+*.pickle
+
+# Python/cache
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# LaTeX build files
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.synctex.gz
