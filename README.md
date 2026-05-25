@@ -74,6 +74,31 @@ paper1_split_strategy_outputs_safe_lighter_v2/
 
 That generated folder is ignored by Git. Copy only compact, publication-facing outputs into `source_data/`, `figures/`, or `manuscript/` when preparing a release.
 
+
+## Data access
+
+This repository does not redistribute the raw ARC–MOF database files. The benchmark uses ARC–MOF-derived adsorption targets, geometric descriptors, and grouped metadata. Users should obtain the relevant ARC–MOF files from the original publication/data records and place them locally according to the folder layout described below.
+
+Required local inputs:
+
+- `clean_data.csv`
+- `geo-clusters.csv`
+- `mc-clusters.csv`
+- `func-clusters.csv`
+- `flig-clusters.csv`
+
+Optional local inputs:
+
+- `geometric_properties.csv`
+- `all_topology_lists.csv`
+
+If `clean_data.csv` is not available, the pipeline can build it from ARC–MOF-derived raw files including:
+
+- `geometric_properties.csv`
+- `post_comb_vsa-CO2.csv`
+- `methane.csv`
+
+The repository includes compact source-data CSV files for the manuscript and Supplementary Information figures/tables. Large full-prediction files, fitted models, and raw third-party database files are excluded from version control and are regenerated locally by rerunning the pipeline.
 ## Recommended release contents
 
 Track these files in Git:
@@ -95,9 +120,16 @@ Do not track:
 
 ## Citation
 
-If you use this repository, please cite:
+If you use this repository, please cite the associated manuscript and the ARC–MOF database:
 
-1. The associated manuscript, once available.
-2. The ARC--MOF dataset and ARC--MOF data paper.
-
-See `CITATION.cff` and `docs/DATA_ACCESS.md` for details.
+```bibtex
+@article{Burner2023ARCMOF,
+  title={ARC--MOF: A Diverse Database of Metal--Organic Frameworks with DFT-Derived Partial Atomic Charges and Descriptors for Machine Learning},
+  author={Burner, Jake and Schwiedrzik, Luca and Krykunov, Mykhaylo and Luo, Jun and Boyd, Peter G. and Woo, Tom K.},
+  journal={Chemistry of Materials},
+  volume={35},
+  number={3},
+  pages={900--916},
+  year={2023},
+  doi={10.1021/acs.chemmater.2c02485}
+}
