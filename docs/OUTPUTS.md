@@ -22,22 +22,4 @@ Key generated files include:
 - `global_results/figures/main/figure_data_csv/*.csv`
 - `global_results/figures/si/figure_data_csv/*.csv`
 
-## What to commit
-
-Commit compact and publication-facing files only:
-
-- figure/table source-data CSVs;
-- selected summary tables used in main text/SI;
-- final publication figures if not too large;
-- code and documentation.
-
-## What not to commit
-
-Do not commit:
-
-- raw ARC--MOF source data;
-- `clean_data.csv` or cluster-label input files;
-- full per-experiment prediction files if very large;
-- `.joblib` model files;
-- `.pkl` files;
-- generated output folders.
+The folder `figure_redraw_package_v2/` contains a cleaned publication-facing subset of figure outputs and plot-data CSV files. It is intended for manuscript figure regeneration and source-data inspection. It should not be confused with the full generated pipeline output folder.
