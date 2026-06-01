@@ -13,6 +13,7 @@ authors:
 repository-code: "https://github.com/Asgari-research/mof-chemical-holdouts"
 date-released: "2026-05-25"
 license: MIT
+
 preferred-citation:
   type: article
     title: "The Split Defines the Claim: A Validation Grammar for Chemically Auditable MOF Discovery"
