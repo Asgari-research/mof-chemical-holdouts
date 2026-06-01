@@ -1,17 +1,4 @@
-# Repository submission checklist
-
-Before linking this repository in the manuscript:
-
-- [ ] README explains the scientific purpose.
-- [ ] README states that raw ARC--MOF data are not redistributed.
-- [ ] Required local input files are listed.
-- [ ] `requirements.txt` or `environment.yml` is present.
-- [ ] `split_strategy_pipeline_raw_arc.py` is present.
-- [ ] `docs/DATA_ACCESS.md` includes exact ARC--MOF release/version and download date.
-- [ ] Source-data CSVs for all manuscript/SI figures and tables are included or clearly described.
-- [ ] `docs/SOURCE_DATA_MANIFEST.md` maps every figure/table to a source-data CSV.
-- [ ] `.gitignore` prevents raw data, generated output folders, model binaries, and full prediction files from being committed.
-- [ ] `CITATION.cff` is present.
-- [ ] LICENSE is present.
-- [ ] Repository URL in the manuscript matches the final GitHub URL.
-- [ ] No private files, raw database files, or local absolute paths are committed.
+- `figure_redraw_package_v2/` is present and contains README, plotting script, figure-data CSVs, regenerated figures, manifest, and QC report.
+- No zip archive is required to access figure/source-data files.
+- The large SI target-distribution CSV is either tracked with Git LFS or replaced with compact binned source data.
+- Structural-audit figure limitations are stated: analytical figures are regenerated from CSVs, while the structural-audit artwork is included as finalized manuscript artwork unless underlying CIF/rendering assets are also provided.
