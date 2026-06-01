@@ -15,7 +15,7 @@ date-released: "2026-05-25"
 license: MIT
 preferred-citation:
   type: article
-  title: "The Split Defines the Claim: A Validation Grammar for Chemically Auditable MOF Discovery"
+    title: "The Split Defines the Claim: A Validation Grammar for Chemically Auditable MOF Discovery"
 authors:
     - family-names: Di Bella
       given-names: Angelo
