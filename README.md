@@ -1,136 +1,45 @@
-# MOF Chemical Holdouts Benchmark
+# Split Strategy manuscript figure-redraw package
 
-Reproducibility package for the manuscript:
+This package contains a clean Python plotting script, the supplied plot-data CSV files, and regenerated manuscript-ready figures in both PNG and PDF format.
 
-**Beyond Random Splits: Domain Shift and Shortlist Instability in Machine-Learning-Guided MOF Discovery**
+## Contents
 
-This repository supports a split-strategy benchmark for machine-learning-guided MOF adsorption screening. The workflow compares random train/test splits with chemically and structurally grouped holdouts while keeping the targets, descriptor families, model classes, hyperparameter logic, and metrics matched.
+- `code/make_publication_figures.py` — complete Python script used to regenerate the figures.
+- `data/main/figure_data_csv/` — source CSV files for main Figures 1–7.
+- `data/si/figure_data_csv/` — source CSV files for the SI figures.
+- `data/structural_audit/` — finalized structural-audit artwork copied from the manuscript package.
+- `figures/main/` — regenerated main-text figures, using manuscript-compatible filenames.
+- `figures/si/` — regenerated SI figures, using manuscript-compatible filenames.
+- `figures/figure_manifest.csv` — file-by-file manifest linking outputs to source CSVs.
+- `figures/QC_REPORT.txt` — short quality-control note.
+- `figures/preview_main_figures.jpg` and `figures/preview_si_figures.jpg` — quick preview sheets.
 
-## What this repository contains
+## How to run
 
-- `split_strategy_pipeline_raw_arc.py` — single-file Python pipeline used to assemble the benchmark table, run split-strategy ML experiments, generate figures/tables, and perform exact post-processing.
-- `docs/` — data-access, output, reproducibility, and GitHub setup notes.
-- `requirements.txt` and `environment.yml` — minimal Python environment specifications.
-- figure_redraw_package_v2/ — publication figure-redraw package containing the cleaned plotting script, plot-data CSV files, regenerated main/SI figures, figure manifest, and QC report.
-
-## What this repository does **not** contain
-
-This repository intentionally does **not** redistribute the ARC--MOF source database or derived large raw/working data files. Users must obtain the source data from the original ARC--MOF data source and comply with the original license and citation requirements.
-
-The required local input files are:
-
-- `clean_data.csv`
-- `geo-clusters.csv`
-- `mc-clusters.csv`
-- `func-clusters.csv`
-- `flig-clusters.csv`
-
-Optional local input files are:
-
-- `geometric_properties.csv`
-- `all_topology_lists.csv`
-
-These files are ignored by Git to avoid redistributing the database. Place them next to `split_strategy_pipeline_raw_arc.py` before running the pipeline, or edit `DATA_DIR` in the script.
-
-## Scientific scope
-
-The central question is not which model or descriptor family is universally best. The goal is to test how the scientific conclusion of a MOF adsorption ML benchmark changes when the validation regime changes from interpolation-like random splits to deployment-relevant grouped extrapolation splits.
-
-The main benchmark targets are:
-
-- CO2 uptake at 0.015 bar
-- CO2 uptake at 0.15 bar
-- CH4 uptake at 5.8 bar
-- CH4 uptake at 65 bar
-
-The anchor target in the manuscript is CO2 uptake at 0.15 bar. This target is used as an adsorption-relevant benchmark target, not as a full process-optimality metric.
-
-## Quick start
+From the package root:
 
 ```bash
-# 1. Create and activate an environment
-conda env create -f environment.yml
-conda activate mof-chemical-holdouts
+python code/make_publication_figures.py
+```
 
-# or with pip
-python -m venv .venv
-# Windows PowerShell:
-.venv\Scripts\Activate.ps1
-# macOS/Linux:
-source .venv/bin/activate
+For a clean conda environment:
+
+```bash
+conda create -n splitfigs python=3.11 -y
+conda activate splitfigs
 pip install -r requirements.txt
-
-# 2. Place required local input CSV files next to the pipeline script
-# clean_data.csv, geo-clusters.csv, mc-clusters.csv, func-clusters.csv, flig-clusters.csv
-
-# 3. Run the pipeline
-python split_strategy_pipeline_raw_arc.py
+python code/make_publication_figures.py
 ```
 
-The script writes outputs to a generated folder named similar to:
+The default script writes outputs to `figures/main` and `figures/si`. To render one figure only:
 
-```text
-paper1_split_strategy_outputs_safe_lighter_v2/
+```bash
+python code/make_publication_figures.py --only figure3
+python code/make_publication_figures.py --only si_prediction_scatter
 ```
 
-That generated folder is ignored by Git. Copy only compact, publication-facing outputs into `source_data/`, `figures/`, or `manuscript/` when preparing a release.
+## Notes
 
+The analytical figures are redrawn directly from the supplied plot-data CSVs. The structural-audit figure in the manuscript is preserved as the existing PDF because the archive contained the finalized artwork but not the underlying CIF/rendering assets needed for a faithful programmatic redraw.
 
-## Data access
-
-This repository does not redistribute the raw ARC–MOF database files. The benchmark uses ARC–MOF-derived adsorption targets, geometric descriptors, and grouped metadata. Users should obtain the relevant ARC–MOF files from the original publication/data records and place them locally according to the folder layout described below.
-
-Required local inputs:
-
-- `clean_data.csv`
-- `geo-clusters.csv`
-- `mc-clusters.csv`
-- `func-clusters.csv`
-- `flig-clusters.csv`
-
-Optional local inputs:
-
-- `geometric_properties.csv`
-- `all_topology_lists.csv`
-
-If `clean_data.csv` is not available, the pipeline can build it from ARC–MOF-derived raw files including:
-
-- `geometric_properties.csv`
-- `post_comb_vsa-CO2.csv`
-- `methane.csv`
-
-The repository includes compact source-data CSV files for the manuscript and Supplementary Information figures/tables. Large full-prediction files, fitted models, and raw third-party database files are excluded from version control and are regenerated locally by rerunning the pipeline.
-## Recommended release contents
-
-Track these files in Git:
-
-- source code
-- README and documentation
-- environment files
-- compact source-data CSVs for figures and tables
-- final manuscript/SI figures if not too large
-- final manuscript/SI LaTeX files if desired
-
-Do not track:
-
-- ARC--MOF raw data
-- local full working tables
-- full per-experiment prediction CSVs if very large
-- trained model binaries
-- logs, caches, temporary outputs, and generated folders
-
-## Citation
-
-If you use this repository, please cite the associated manuscript and the ARC–MOF database:
-
-```bibtex
-@article{Burner2023ARCMOF,
-  title={ARC--MOF: A Diverse Database of Metal--Organic Frameworks with DFT-Derived Partial Atomic Charges and Descriptors for Machine Learning},
-  author={Burner, Jake and Schwiedrzik, Luca and Krykunov, Mykhaylo and Luo, Jun and Boyd, Peter G. and Woo, Tom K.},
-  journal={Chemistry of Materials},
-  volume={35},
-  number={3},
-  pages={900--916},
-  year={2023},
-  doi={10.1021/acs.chemmater.2c02485}
-}
+The generated filenames are kept compatible with the current LaTeX package, so the folders `figures/main` and `figures/si` can be copied over the corresponding manuscript folders.
