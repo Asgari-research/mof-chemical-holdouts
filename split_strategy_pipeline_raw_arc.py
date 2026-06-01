@@ -78,7 +78,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR
 
-PIPELINE_VARIANT = "safe_lighter_v2"
+PIPELINE_VARIANT = "Version_2"
 OUTPUT_DIR = BASE_DIR / f"paper1_split_strategy_outputs_{PIPELINE_VARIANT}"
 MEMORY_SAFE_PATCH = "v7_polished_split_consequence_figures"
 
@@ -103,7 +103,6 @@ MIN_GROUP_SIZE_FOR_ANALYSIS = 5
 N_BOOTSTRAP = 1000
 MAX_ROWS_FOR_VISUAL_PCA = 20000
 
-# Safer/lighter model-running controls.
 # MAX_CATEGORICAL_LEVELS_FOR_ONEHOT caps rare topology/category expansion and
 # prevents dense HGB/MLP design matrices from becoming unexpectedly huge.
 MAX_CATEGORICAL_LEVELS_FOR_ONEHOT = 128
