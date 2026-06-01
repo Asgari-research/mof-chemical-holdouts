@@ -1,0 +1,50 @@
+Split Strategy figure regeneration QC report
+================================================
+
+Generated analytical figures from exported CSV plot data.
+PNG and PDF versions are provided for each regenerated figure.
+
+Figure manifest:
+- figures\main\figure1.pdf | source: main/figure_data_csv/figure1_v8_polished_workflow_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure1.png | source: main/figure_data_csv/figure1_v8_polished_workflow_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure2_v8_split_family_severity_polished.pdf | source: main/figure_data_csv/figure2_v8_split_family_severity_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure2_v8_split_family_severity_polished.png | source: main/figure_data_csv/figure2_v8_split_family_severity_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure3_v8_target_split_sensitivity_polished.pdf | source: main/figure_data_csv/figure3_v8_target_split_sensitivity_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure3_v8_target_split_sensitivity_polished.png | source: main/figure_data_csv/figure3_v8_target_split_sensitivity_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure4_v8_screening_consequences_polished.pdf | source: main/figure_data_csv/figure4_v8_screening_consequences_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure4_v8_screening_consequences_polished.png | source: main/figure_data_csv/figure4_v8_screening_consequences_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure5_v9_hard_group_lollipop_polished.pdf | source: main/figure_data_csv/figure5_v9_hard_group_lollipop_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure5_v9_hard_group_lollipop_polished.png | source: main/figure_data_csv/figure5_v9_hard_group_lollipop_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure6_v8_shift_and_descriptor_space_polished.pdf | source: main/figure_data_csv/figure6_v8_shift_and_descriptor_space_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure6_v8_shift_and_descriptor_space_polished.png | source: main/figure_data_csv/figure6_v8_shift_and_descriptor_space_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure7_v8_exact_elite_instability_polished.pdf | source: main/figure_data_csv/figure7_v8_exact_elite_instability_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\figure7_v8_exact_elite_instability_polished.png | source: main/figure_data_csv/figure7_v8_exact_elite_instability_polished_plot_data.csv | programmatically regenerated from exported main plot-data CSV
+- figures\main\Figure_main_structural_audit_grouped_extrapolation_v7_final.pdf | source: structural_audit/Figure_main_structural_audit_grouped_extrapolation_v7_final.pdf | copied original structural-audit artwork; underlying rendering assets were not present
+- figures\si\si_heatmap_kendall_tau.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_heatmap_kendall_tau.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_heatmap_mae.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_heatmap_mae.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_heatmap_r2.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_heatmap_r2.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_heatmap_spearman_rho.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_heatmap_spearman_rho.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_heatmap_top_5pct_enrichment.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_heatmap_top_5pct_enrichment.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_heatmap_top_5pct_overlap.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_heatmap_top_5pct_overlap.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_v7_error_vs_screening_rank_clean.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_v7_error_vs_screening_rank_clean.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_v7_group_size_summary_logscale.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_v7_group_size_summary_logscale.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_v8_pld_decile_errors_clear_labels.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_v8_pld_decile_errors_clear_labels.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_v8_prediction_scatter_panels_clear_labels.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_v8_prediction_scatter_panels_clear_labels.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_v8_target_distributions_clear_labels.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_v8_target_distributions_clear_labels.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_variance_decomposition.pdf | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+- figures\si\si_variance_decomposition.png | source: si/figure_data_csv/ | programmatically regenerated from exported SI plot-data CSV
+
+Structural-audit figure note: the manuscript PDF was copied into figures/main because the archive contains the finalized structural-audit artwork but not the underlying CIF/rendering assets needed for a faithful programmatic redraw.
+
+Recommended manuscript use: replace the existing files in figures/main and figures/si with the matching filenames from this package.

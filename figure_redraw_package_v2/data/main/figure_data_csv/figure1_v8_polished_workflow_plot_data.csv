@@ -1,0 +1,19 @@
+x,y,width,height,heading,body,color
+0.055,0.665,0.245,0.18,Data,"clean adsorption table
+cluster labels
+optional topology metadata",#EAF2F8
+0.382,0.665,0.245,0.18,Matched design,"same targets
+same descriptors
+same model grid",#EEF6EA
+0.71,0.665,0.245,0.18,Split families,"random
+geometry / chemistry
+topology stress test",#F7EEF6
+0.055,0.315,0.245,0.18,Models,"Ridge, RF, HGB, MLP
+main text: RF-centred
+SI: all models",#FDF3E7
+0.382,0.315,0.245,0.18,Consequences,"accuracy loss
+rank inversion
+elite-list instability",#FFF8E6
+0.71,0.315,0.245,0.18,Outputs,"tables + figure data
+PNG/PDF figures
+case-study candidates",#EEF1F5

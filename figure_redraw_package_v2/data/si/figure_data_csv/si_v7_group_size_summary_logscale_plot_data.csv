@@ -1,0 +1,6 @@
+split_family,group_column,n_groups,min_group_size,median_group_size,mean_group_size,max_group_size
+geo_grouped,geo_cluster,146411,1,1.0,1.80139470394984,26
+metal_grouped,metal_cluster,2447,1,2.0,104.75194115243156,35572
+func_grouped,func_cluster,43744,1,2.0,4.904238295537674,2954
+linker_grouped,linker_cluster,125220,1,2.0,2.0470212426130012,356
+topology_grouped,topology_label,47,52,175.0,5611.574468085107,99167
