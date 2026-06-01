@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this repository, please cite the associated manuscript and the ARC-MOF dataset/data paper."
-title: "MOF Chemical Holdouts Benchmark"
+title: "The Split Defines the Claim: A Validation Grammar for Chemically Auditable MOF Discovery"
 authors:
   - family-names: Di Bella
     given-names: Angelo
@@ -15,8 +15,8 @@ date-released: "2026-05-25"
 license: MIT
 preferred-citation:
   type: article
-  title: "Beyond Random Splits: Domain Shift and Shortlist Instability in Machine-Learning-Guided MOF Discovery"
-  authors:
+  title: "The Split Defines the Claim: A Validation Grammar for Chemically Auditable MOF Discovery"
+authors:
     - family-names: Di Bella
       given-names: Angelo
     - family-names: Abaei
