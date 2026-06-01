@@ -11,6 +11,7 @@ This repository supports a split-strategy benchmark for machine-learning-guided 
 - `split_strategy_pipeline_raw_arc.py` — single-file Python pipeline used to assemble the benchmark table, run split-strategy ML experiments, generate figures/tables, and perform exact post-processing.
 - `docs/` — data-access, output, reproducibility, and GitHub setup notes.
 - `requirements.txt` and `environment.yml` — minimal Python environment specifications.
+- figure_redraw_package_v2/ — publication figure-redraw package containing the cleaned plotting script, plot-data CSV files, regenerated main/SI figures, figure manifest, and QC report.
 
 ## What this repository does **not** contain
 
