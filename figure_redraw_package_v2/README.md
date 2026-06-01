@@ -12,7 +12,6 @@ This package contains a clean Python plotting script, the supplied plot-data CSV
 - `figures/si/` — regenerated SI figures, using manuscript-compatible filenames.
 - `figures/figure_manifest.csv` — file-by-file manifest linking outputs to source CSVs.
 - `figures/QC_REPORT.txt` — short quality-control note.
-- `figures/preview_main_figures.jpg` and `figures/preview_si_figures.jpg` — quick preview sheets.
 
 ## How to run
 
