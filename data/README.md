@@ -4,7 +4,7 @@ This folder contains the processed benchmark input table used to support the che
 
 ## Included file
 
-* `clean_data.csv`
+- `clean_data.csv`
 
 `clean_data.csv` is a processed ARC--MOF-derived benchmark table prepared for this study. It was generated from ARC--MOF source data through data cleaning, identifier normalization, adsorption-target organization, descriptor preparation, and construction of machine-learning-ready inputs. It should therefore be treated as a derived benchmark table, not as the original ARC--MOF release.
 
@@ -35,7 +35,7 @@ Associated ARC--MOF publication:
 }
 ```
 
-ARC--MOF is distributed under the Creative Commons Attribution 4.0 International license. Because `clean_data.csv` is derived from ARC--MOF, users should follow the original ARC--MOF license and citation requirements.
+Users should follow the original ARC--MOF license and citation requirements. Because `clean_data.csv` is derived from ARC--MOF, it should not be described as the original ARC--MOF database.
 
 ## Files not included
 
@@ -43,22 +43,22 @@ This folder does not redistribute the full ARC--MOF database or raw source files
 
 The following files are not included and should be obtained from the original ARC--MOF source records or generated locally when needed:
 
-* `geometric_properties.csv`
-* `post_comb_vsa-CO2.csv`
-* `methane.csv`
-* raw ARC--MOF CIF archives
-* full ARC--MOF structural/database files
-* large generated prediction files
-* trained model objects
-* local output folders
+- `geometric_properties.csv`
+- `post_comb_vsa-CO2.csv`
+- `methane.csv`
+- raw ARC--MOF CIF archives
+- full ARC--MOF structural/database files
+- large generated prediction files
+- trained model objects
+- local output folders
 
 For the full split-strategy pipeline, additional grouped metadata files may be required locally, depending on the workflow stage being rerun:
 
-* `geo-clusters.csv`
-* `mc-clusters.csv`
-* `func-clusters.csv`
-* `flig-clusters.csv`
-* `all_topology_lists.csv`
+- `geo-clusters.csv`
+- `mc-clusters.csv`
+- `func-clusters.csv`
+- `flig-clusters.csv`
+- `all_topology_lists.csv`
 
 These files are not redistributed here unless explicitly permitted and documented.
 
