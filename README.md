@@ -8,13 +8,15 @@ This repository supports a chemically auditable split-strategy benchmark for mac
 
 The central purpose is not to identify a universally best model or descriptor family. The purpose is to test how the scientific meaning of a MOF ML screening claim changes when validation shifts from interpolation-like random splitting to deployment-relevant grouped extrapolation across geometry, metal-cluster, functional-group, linker, and topology families.
 
-In this project, the validation split is treated as a scientific variable: **the split defines the claim**.
+In this project, the validation split is treated as a scientific variable:
+
+> **The split defines the claim.**
 
 ---
 
 ## Repository overview
 
-This repository contains code, documentation, compact source-data files, and figure-regeneration materials for the split-strategy MOF adsorption benchmark.
+This repository contains code, documentation, a processed ARC--MOF-derived benchmark table, compact source-data files, and figure-regeneration materials for the split-strategy MOF adsorption benchmark.
 
 Main components:
 
@@ -27,13 +29,16 @@ mof-chemical-holdouts/
 ├── CITATION.cff
 ├── LICENSE
 ├── data/
+│   ├── README.md
+│   └── clean_data.csv
 ├── docs/
 ├── figure_redraw_package_v2/
+└── source_data/                  # optional, if compact source-data tables are unpacked here
 ```
 
-The repository is designed to support three levels of reproducibility:
+The repository supports three levels of reproducibility:
 
-1. **Benchmark rerun** from locally supplied ARC--MOF-derived input files.
+1. **Benchmark rerun** from the included processed benchmark table and/or locally supplied ARC--MOF-derived input files.
 2. **Exact post-processing audit** from regenerated prediction outputs.
 3. **Publication figure regeneration** from compact plot-data CSV files in `figure_redraw_package_v2/`.
 
@@ -43,33 +48,135 @@ The repository is designed to support three levels of reproducibility:
 
 ### Main pipeline
 
-* `split_strategy_pipeline_raw_arc.py`
+- `split_strategy_pipeline_raw_arc.py`  
   Main Python pipeline used to assemble the benchmark table, run split-strategy ML experiments, generate metrics, and perform exact post-processing.
 
 The pipeline supports matched comparison across:
 
-* random splitting,
-* geometry-grouped splitting,
-* metal-cluster-grouped splitting,
-* functional-group-grouped splitting,
-* linker-grouped splitting,
-* topology-grouped splitting.
+- random splitting,
+- geometry-grouped splitting,
+- metal-cluster-grouped splitting,
+- functional-group-grouped splitting,
+- linker-grouped splitting,
+- topology-grouped splitting.
 
 The main benchmark targets are:
 
-* CO2 uptake at 0.015 bar,
-* CO2 uptake at 0.15 bar,
-* CH4 uptake at 5.8 bar,
-* CH4 uptake at 65 bar.
+- CO2 uptake at 0.015 bar,
+- CO2 uptake at 0.15 bar,
+- CH4 uptake at 5.8 bar,
+- CH4 uptake at 65 bar.
 
 The manuscript uses **CO2 uptake at 0.15 bar** as the anchor adsorption target. This target is used as an adsorption-relevant validation target, not as a complete process-optimality metric.
 
 ---
 
-### Documentation
+## Data included in this repository
 
-* `docs/`
-  Documentation for data access, expected local file layout, output interpretation, source-data organization, GitHub/release preparation, and submission checks.
+This repository includes one processed ARC--MOF-derived benchmark table:
+
+```text
+data/clean_data.csv
+```
+
+`clean_data.csv` is a derived, machine-learning-ready benchmark table prepared for the present split-strategy study. It was generated from ARC--MOF source data through data cleaning, identifier normalization, adsorption-target organization, descriptor preparation, and construction of benchmark-ready inputs.
+
+It should be treated as a **processed benchmark table**, not as the original ARC--MOF release.
+
+The file is included to support transparency, reproducibility, and reuse of the reported benchmark analysis. It allows users to inspect and rerun the benchmark workflow without reconstructing the main working table from raw ARC--MOF source files.
+
+---
+
+## Original data source
+
+The underlying source data are derived from ARC--MOF. Users should cite the original ARC--MOF dataset and associated publication when using `clean_data.csv` or this repository.
+
+Original ARC--MOF data record:
+
+```text
+https://doi.org/10.5281/zenodo.6908728
+```
+
+Associated ARC--MOF publication:
+
+```bibtex
+@article{burner2023arcmof,
+  title   = {ARC--MOF: A Diverse Database of Metal--Organic Frameworks with DFT-Derived Partial Atomic Charges and Descriptors for Machine Learning},
+  author  = {Burner, Jake and Schwiedrzik, Luca and Krykunov, Mykhaylo and Luo, Jun and Boyd, Peter G. and Woo, Tom K.},
+  journal = {Chemistry of Materials},
+  volume  = {35},
+  number  = {3},
+  pages   = {900--916},
+  year    = {2023},
+  doi     = {10.1021/acs.chemmater.2c02485}
+}
+```
+
+Users should follow the original ARC--MOF license and attribution requirements. This repository does not grant any additional rights to redistribute raw third-party ARC--MOF database files beyond the rights provided by the original data source.
+
+---
+
+## Files not included
+
+This repository does **not** redistribute the full ARC--MOF database or raw ARC--MOF source files.
+
+The following files are intentionally not included unless explicitly permitted and documented:
+
+- raw ARC--MOF database files,
+- raw third-party MOF structural databases,
+- complete ARC--MOF CIF archives,
+- `geometric_properties.csv`,
+- `post_comb_vsa-CO2.csv`,
+- `methane.csv`,
+- large full per-experiment prediction CSV files,
+- trained model binaries,
+- large local working tables,
+- local cache folders,
+- temporary logs,
+- private local paths,
+- large generated output folders.
+
+The repository remains a compact reproducibility, source-data, and figure-generation package rather than a redistribution of ARC--MOF.
+
+---
+
+## Additional local files for full regeneration
+
+The included `data/clean_data.csv` supports rerunning the benchmark from the processed working table. Some full-regeneration or consistency-check workflows may require additional local grouped metadata files.
+
+Depending on the workflow stage, the following additional files may be required locally:
+
+```text
+geo-clusters.csv
+mc-clusters.csv
+func-clusters.csv
+flig-clusters.csv
+```
+
+Optional local inputs:
+
+```text
+geometric_properties.csv
+all_topology_lists.csv
+```
+
+If `clean_data.csv` is not used directly, the pipeline can build it from ARC--MOF-derived raw files, including:
+
+```text
+geometric_properties.csv
+post_comb_vsa-CO2.csv
+methane.csv
+```
+
+together with the grouped metadata files.
+
+These raw/source files should be obtained from the original ARC--MOF records and placed locally according to `docs/DATA_ACCESS.md`.
+
+---
+
+## Documentation
+
+The `docs/` folder contains documentation for data access, expected local file layout, output interpretation, source-data organization, GitHub/release preparation, and submission checks.
 
 Recommended documentation files include:
 
@@ -85,10 +192,15 @@ docs/
 
 ---
 
-### Figure-redraw package
+## Figure-redraw package
 
-* `figure_redraw_package_v2/`
-  Publication-facing figure-regeneration package containing the cleaned plotting script, plot-data CSV files, regenerated main/SI figures, a figure manifest, and a QC report.
+The folder:
+
+```text
+figure_redraw_package_v2/
+```
+
+contains a publication-facing figure-regeneration package with the cleaned plotting script, plot-data CSV files, regenerated main/SI figures, a figure manifest, and a QC report.
 
 Expected structure:
 
@@ -111,7 +223,7 @@ figure_redraw_package_v2/
     └── QC_REPORT.txt
 ```
 
-The analytical main-text and SI figures are redrawn from supplied plot-data CSV files. The structural-audit figure is preserved as finalized manuscript artwork unless the underlying CIF/rendering assets are also supplied.
+The analytical main-text and SI figures are redrawn from supplied plot-data CSV files. The structural-audit figure is preserved as finalized manuscript artwork unless the underlying CIF files, rendering settings, and composite-figure script are also supplied.
 
 ---
 
@@ -125,69 +237,16 @@ The manuscript asks:
 
 A random split asks whether a model interpolates within a familiar database neighbourhood. Grouped splits ask different chemical transfer questions:
 
-| Split family             | Chemistry-facing question                                                                  | Interpretation                                                                                                                   |
-| ------------------------ | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| Random                   | Can the model interpolate within the same database neighbourhood?                          | Baseline interpolation regime. Useful, but insufficient by itself for discovery claims involving unfamiliar chemistry.           |
-| Geometry-grouped         | Can the model transfer across pore-size or pore-shape regimes?                             | Pore-regime holdout, interpreted through PLD, LCD, density, void fraction, accessible surface area, and pore-volume descriptors. |
-| Metal-cluster-grouped    | Can the model transfer to unfamiliar node chemistry or coordination environments?          | Node-family holdout. Relevant to metal identity, local coordination, charge distribution, and node environment.                  |
-| Functional-group-grouped | Can the model transfer to unfamiliar local chemical motifs?                                | Local-motif holdout. Relevant to polar groups, heteroatoms, electrostatics, and low-pressure adsorption environments.            |
-| Linker-grouped           | Can the model transfer to unfamiliar organic scaffold families?                            | Linker-family holdout, analogous in spirit to scaffold splits in molecular ML but adapted to framework solids.                   |
-| Topology-grouped         | Can the model transfer to unfamiliar framework connectivity and pore-network architecture? | Severe structural-extrapolation holdout. This is not a claim that topology alone controls uptake.                                |
+| Split family | Chemistry-facing question | Interpretation |
+|---|---|---|
+| Random | Can the model interpolate within the same database neighbourhood? | Baseline interpolation regime. Useful, but insufficient by itself for discovery claims involving unfamiliar chemistry. |
+| Geometry-grouped | Can the model transfer across pore-size or pore-shape regimes? | Pore-regime holdout, interpreted through PLD, LCD, density, void fraction, accessible surface area, and pore-volume descriptors. |
+| Metal-cluster-grouped | Can the model transfer to unfamiliar node chemistry or coordination environments? | Node-family holdout. Relevant to metal identity, local coordination, charge distribution, and node environment. |
+| Functional-group-grouped | Can the model transfer to unfamiliar local chemical motifs? | Local-motif holdout. Relevant to polar groups, heteroatoms, electrostatics, and low-pressure adsorption environments. |
+| Linker-grouped | Can the model transfer to unfamiliar organic scaffold families? | Linker-family holdout, analogous in spirit to scaffold splits in molecular ML but adapted to framework solids. |
+| Topology-grouped | Can the model transfer to unfamiliar framework connectivity and pore-network architecture? | Severe structural-extrapolation holdout. This is not a claim that topology alone controls uptake. |
 
 The study reports regression metrics, rank metrics, top-5% screening metrics, exact elite-list stability, held-out-group diagnostics, and structural audit cases.
-
----
-
-## What this repository does not contain
-
-This repository intentionally does **not** redistribute:
-
-* raw ARC--MOF database files,
-* raw third-party MOF structural databases,
-* full local working tables,
-* large full per-experiment prediction CSVs,
-* trained model binaries,
-* local cache folders,
-* temporary logs,
-* private local paths,
-* complete ARC--MOF CIF archives.
-
-Users must obtain ARC--MOF source data from the original providers and comply with the original license and citation requirements.
-
-Raw third-party database files are intentionally excluded so that this repository remains a compact reproducibility and source-data package rather than a redistribution of ARC--MOF.
-
----
-
-## Required local input files
-
-To rerun the full benchmark, place the required local input files next to `split_strategy_pipeline_raw_arc.py`, or edit the data path inside the script.
-
-Required local inputs:
-
-```text
-clean_data.csv
-geo-clusters.csv
-mc-clusters.csv
-func-clusters.csv
-flig-clusters.csv
-```
-
-Optional local inputs:
-
-```text
-geometric_properties.csv
-all_topology_lists.csv
-```
-
-If `clean_data.csv` is not already available, the pipeline can build it from ARC--MOF-derived raw files, including:
-
-```text
-geometric_properties.csv
-post_comb_vsa-CO2.csv
-methane.csv
-```
-
-The exact required file names and expected layout should also be documented in `docs/DATA_ACCESS.md`.
 
 ---
 
@@ -233,11 +292,24 @@ pip install -r requirements.txt
 
 ## Quick start: run the main benchmark pipeline
 
-After placing the required local input files in the expected location:
+After placing the required local input files in the expected location, run:
 
 ```bash
 python split_strategy_pipeline_raw_arc.py
 ```
+
+The included processed table is:
+
+```text
+data/clean_data.csv
+```
+
+Depending on the current configuration, the pipeline may expect `clean_data.csv` either:
+
+1. in the repository `data/` folder, or
+2. next to `split_strategy_pipeline_raw_arc.py`.
+
+Before running the workflow, check the `DATA_DIR` or equivalent path setting inside the pipeline script.
 
 The script writes generated outputs to a local output directory. Depending on the script version, this folder may have a name similar to:
 
@@ -292,57 +364,6 @@ The manifest links figure outputs to source CSV files. The QC report records fig
 
 ---
 
-## Figure-redraw package contents
-
-The expected figure-redraw package includes:
-
-```text
-figure_redraw_package_v2/
-├── README.md
-├── requirements.txt
-├── code/
-│   └── make_publication_figures.py
-├── data/
-│   ├── main/
-│   │   └── figure_data_csv/
-│   │       ├── figure1_v8_polished_workflow_plot_data.csv
-│   │       ├── figure2_v8_split_family_severity_polished_plot_data.csv
-│   │       ├── figure3_v8_target_split_sensitivity_polished_plot_data.csv
-│   │       ├── figure4_v8_screening_consequences_polished_plot_data.csv
-│   │       ├── figure5_v9_hard_group_lollipop_polished_plot_data.csv
-│   │       ├── figure6_v8_shift_and_descriptor_space_polished_plot_data.csv
-│   │       └── figure7_v8_exact_elite_instability_polished_plot_data.csv
-│   ├── si/
-│   │   └── figure_data_csv/
-│   │       ├── si_v7_group_size_summary_logscale_plot_data.csv
-│   │       ├── si_v8_target_distributions_clear_labels_plot_data.csv
-│   │       ├── si_v8_prediction_scatter_panels_clear_labels_plot_data.csv
-│   │       ├── si_v8_pld_decile_errors_clear_labels_plot_data.csv
-│   │       ├── si_heatmap_r2_plot_data.csv
-│   │       ├── si_heatmap_mae_plot_data.csv
-│   │       ├── si_heatmap_spearman_rho_plot_data.csv
-│   │       ├── si_heatmap_kendall_tau_plot_data.csv
-│   │       ├── si_heatmap_top_5pct_overlap_plot_data.csv
-│   │       ├── si_heatmap_top_5pct_enrichment_plot_data.csv
-│   │       ├── si_v7_error_vs_screening_rank_clean_plot_data.csv
-│   │       └── si_variance_decomposition_plot_data.csv
-│   └── structural_audit/
-│       └── Figure_main_structural_audit_grouped_extrapolation_v7_final.pdf
-└── figures/
-    ├── main/
-    ├── si/
-    ├── figure_manifest.csv
-    └── QC_REPORT.txt
-```
-
-Notes:
-
-* Analytical figures are regenerated from CSV files.
-* The structural-audit figure is included as finalized artwork unless the underlying CIF/rendering workflow is also provided.
-* Large point-level SI CSV files may require Git LFS or replacement with compact binned source-data files.
-
----
-
 ## Large-file note
 
 One SI source-data file may be large:
@@ -359,7 +380,15 @@ git lfs track "figure_redraw_package_v2/data/si/figure_data_csv/si_v8_target_dis
 git add .gitattributes
 ```
 
-Alternatively, replace the raw point-level plotting CSV with a compact binned histogram source-data CSV and update the plotting script accordingly.
+If `data/clean_data.csv` is large, track it with Git LFS as well:
+
+```bash
+git lfs install
+git lfs track "data/clean_data.csv"
+git add .gitattributes
+```
+
+Alternatively, replace very large point-level plotting CSVs with compact binned source-data files and update the plotting script accordingly.
 
 ---
 
@@ -367,17 +396,17 @@ Alternatively, replace the raw point-level plotting CSV with a compact binned hi
 
 The full benchmark pipeline can generate:
 
-* fold-level metrics,
-* split-family benchmark summaries,
-* target-sensitivity summaries,
-* screening recovery metrics,
-* top-5% enrichment metrics,
-* exact elite-list stability outputs,
-* held-out-group error summaries,
-* structural-audit candidate tables,
-* source-data tables for manuscript and SI figures.
+- fold-level metrics,
+- split-family benchmark summaries,
+- target-sensitivity summaries,
+- screening recovery metrics,
+- top-5% enrichment metrics,
+- exact elite-list stability outputs,
+- held-out-group error summaries,
+- structural-audit candidate tables,
+- source-data tables for manuscript and SI figures.
 
-The exact output folder name may depend on the pipeline version. Large generated outputs should usually remain local and ignored by Git.
+Large generated outputs should usually remain local and ignored by Git.
 
 ---
 
@@ -418,10 +447,10 @@ The manuscript includes CIF-based structural audit examples to connect split-ind
 
 These cases are diagnostic examples. They are not claimed to be:
 
-* best MOFs,
-* process-optimal sorbents,
-* mechanistic proof that topology alone controls adsorption,
-* independent validation sets.
+- best MOFs,
+- process-optimal sorbents,
+- mechanistic proof that topology alone controls adsorption,
+- independent validation sets.
 
 Selected structural-audit artwork and compact source-data records may be included in the repository. The full ARC--MOF CIF database should not be redistributed unless permitted by the original data license.
 
@@ -445,8 +474,8 @@ split family
 
 Recommended language for manual interpretation:
 
-* use: “illustrates,” “is consistent with,” “suggests,” “diagnostic,” “high-error regime,” “shortlist transition”;
-* avoid: “proves,” “demonstrates the mechanism,” “topology controls uptake,” “best MOF,” “process-optimal sorbent.”
+- use: “illustrates,” “is consistent with,” “suggests,” “diagnostic,” “high-error regime,” “shortlist transition”;
+- avoid: “proves,” “demonstrates the mechanism,” “topology controls uptake,” “best MOF,” “process-optimal sorbent.”
 
 ---
 
@@ -461,6 +490,8 @@ CITATION.cff
 requirements.txt
 environment.yml
 split_strategy_pipeline_raw_arc.py
+data/README.md
+data/clean_data.csv
 docs/
 figure_redraw_package_v2/README.md
 figure_redraw_package_v2/requirements.txt
@@ -482,7 +513,9 @@ Do not track:
 ```text
 raw ARC--MOF database files
 full ARC--MOF CIF archive
-local full working tables
+geometric_properties.csv
+post_comb_vsa-CO2.csv
+methane.csv
 large full per-experiment prediction CSVs
 trained model binaries
 temporary output folders
@@ -497,9 +530,21 @@ credentials or tokens
 
 ---
 
-## Recommended `.gitignore` additions
+## Recommended `.gitignore` policy
 
-The repository should ignore raw and generated local data:
+Because this repository intentionally includes `data/clean_data.csv` but excludes raw ARC--MOF source files and large generated outputs, the `.gitignore` should allow only the curated processed data file inside `data/`.
+
+Recommended data section:
+
+```gitignore
+# Data policy
+data/*
+!data/
+!data/README.md
+!data/clean_data.csv
+```
+
+Recommended full additions:
 
 ```gitignore
 # Python
@@ -526,18 +571,15 @@ full_predictions/
 models/
 model_binaries/
 
-# Raw/local data
-data/raw/
-data/local/
-clean_data.csv
+# Raw ARC--MOF and local source files
+geometric_properties.csv
+post_comb_vsa-CO2.csv
+methane.csv
 geo-clusters.csv
 mc-clusters.csv
 func-clusters.csv
 flig-clusters.csv
-geometric_properties.csv
 all_topology_lists.csv
-post_comb_vsa-CO2.csv
-methane.csv
 
 # Archives
 *.zip
@@ -550,8 +592,6 @@ methane.csv
 Thumbs.db
 .vscode/
 ```
-
-If a required release artifact is a zip archive, document why it is included. In general, prefer unpacked folders over zip files for source-data and reproducibility materials.
 
 ---
 
@@ -580,15 +620,17 @@ The structural-audit figure is included as finalized artwork in the package. It 
 
 ## Data availability statement
 
-This repository does not redistribute raw ARC--MOF database files. Users should obtain ARC--MOF from the original data source and follow the original license and citation requirements.
+This repository includes:
 
-The repository provides:
+- code for the split-strategy benchmark,
+- `data/clean_data.csv`, a processed ARC--MOF-derived benchmark table,
+- compact source-data and plot-data files,
+- regenerated manuscript and SI figures,
+- figure-regeneration scripts,
+- documentation for required local inputs,
+- reproducibility and submission-check guidance.
 
-* code for the split-strategy benchmark,
-* compact source-data and plot-data files,
-* figure-regeneration scripts,
-* documentation for required local inputs,
-* reproducibility and submission-check guidance.
+This repository does not redistribute raw ARC--MOF database files, raw third-party structural databases, full ARC--MOF CIF archives, large full-prediction files, or fitted model objects. Users who need the original ARC--MOF source data should obtain them from the original data source and follow the original license and citation requirements.
 
 Large full-prediction files and fitted models are intentionally excluded from version control and should be regenerated locally.
 
@@ -610,7 +652,7 @@ If you use this repository, please cite the associated manuscript:
 Please also cite the ARC--MOF database:
 
 ```bibtex
-@article{Burner2023ARCMOF,
+@article{burner2023arcmof,
   title   = {ARC--MOF: A Diverse Database of Metal--Organic Frameworks with DFT-Derived Partial Atomic Charges and Descriptors for Machine Learning},
   author  = {Burner, Jake and Schwiedrzik, Luca and Krykunov, Mykhaylo and Luo, Jun and Boyd, Peter G. and Woo, Tom K.},
   journal = {Chemistry of Materials},
@@ -631,6 +673,8 @@ Update the manuscript citation once DOI, journal, preprint, or submission detail
 This repository is distributed under the MIT License unless otherwise noted.
 
 The license applies to code and repository documentation. It does not grant redistribution rights for raw third-party database files, including ARC--MOF data, unless those rights are provided by the original data source.
+
+The included `data/clean_data.csv` is a processed benchmark table derived from ARC--MOF. Users should follow the original ARC--MOF license and citation requirements when using this derived data file.
 
 ---
 
