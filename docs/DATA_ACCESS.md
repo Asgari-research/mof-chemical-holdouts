@@ -99,15 +99,3 @@ When using this workflow or the included derived data file, cite:
 2. the ARC--MOF data paper,
 3. the ARC--MOF dataset/data record,
 4. this software repository, if used directly.
-
-## Safe manuscript wording
-
-A safe manuscript data/code availability statement should say that:
-
-- the repository includes code, documentation, compact source-data tables, figure-redraw files, and `data/clean_data.csv`;
-- `clean_data.csv` is a processed ARC--MOF-derived benchmark table;
-- raw ARC--MOF source files and full structural/database files are not redistributed;
-- users should obtain original ARC--MOF source files from the original providers;
-- the ARC--MOF paper and data record should be cited.
-
-Do not describe `clean_data.csv` as the original ARC--MOF database. It is a derived benchmark table.
