@@ -1,45 +1,113 @@
-# Data access and non-redistribution policy
+# Data access and redistribution policy
 
-This repository intentionally does **not** redistribute ARC--MOF source data or local derived working tables.
+This repository includes a processed ARC--MOF-derived benchmark table for reproducibility:
 
-## Required local files
+```text
+data/clean_data.csv
+```
 
-The pipeline expects the following required files to be present locally:
+The included `clean_data.csv` file is a derived, machine-learning-ready benchmark table prepared for the present study. It was generated from ARC--MOF source data through data cleaning, identifier normalization, adsorption-target organization, descriptor preparation, and construction of benchmark-ready inputs. It should not be interpreted as the original ARC--MOF release.
 
-- `clean_data.csv`
-- `geo-clusters.csv`
-- `mc-clusters.csv`
-- `func-clusters.csv`
-- `flig-clusters.csv`
+## Original ARC--MOF source
 
-Optional files:
+The underlying source data are derived from ARC--MOF.
 
-- `geometric_properties.csv`
-- `all_topology_lists.csv`
+Original ARC--MOF data record:
 
-By default, `split_strategy_pipeline_raw_arc.py` sets `BASE_DIR = Path(__file__).resolve().parent` and `DATA_DIR = BASE_DIR`, so these files should be placed next to the script unless `DATA_DIR` is edited.
+```text
+https://doi.org/10.5281/zenodo.6908728
+```
 
-## Why the database is not included
+Users should cite the ARC--MOF dataset and associated publication when using this repository or the included `clean_data.csv`.
 
-The ARC--MOF database and large derived prediction files are not included to avoid redistributing third-party data and to keep the repository lightweight. Users should obtain source files from the original ARC--MOF source and follow its license and attribution requirements.
+Associated ARC--MOF publication:
+
+```bibtex
+@article{burner2023arcmof,
+  title   = {ARC--MOF: A Diverse Database of Metal--Organic Frameworks with DFT-Derived Partial Atomic Charges and Descriptors for Machine Learning},
+  author  = {Burner, Jake and Schwiedrzik, Luca and Krykunov, Mykhaylo and Luo, Jun and Boyd, Peter G. and Woo, Tom K.},
+  journal = {Chemistry of Materials},
+  volume  = {35},
+  number  = {3},
+  pages   = {900--916},
+  year    = {2023},
+  doi     = {10.1021/acs.chemmater.2c02485}
+}
+```
+
+ARC--MOF is distributed under the Creative Commons Attribution 4.0 International license. Users should follow the original ARC--MOF license and attribution requirements.
+
+## Included data
+
+Included in this repository:
+
+```text
+data/clean_data.csv
+```
+
+This file is included to support transparency, reproducibility, and reuse of the reported benchmark analysis.
+
+## Files not redistributed
+
+This repository does not redistribute the full ARC--MOF database or raw ARC--MOF source files.
+
+The following files are not included unless explicitly permitted and documented:
+
+```text
+geometric_properties.csv
+post_comb_vsa-CO2.csv
+methane.csv
+raw ARC--MOF CIF archives
+complete ARC--MOF structural/database files
+large full prediction files
+trained model binaries
+large generated output folders
+```
+
+Depending on the workflow stage, the following grouped metadata files may also be required locally:
+
+```text
+geo-clusters.csv
+mc-clusters.csv
+func-clusters.csv
+flig-clusters.csv
+all_topology_lists.csv
+```
+
+If these files are not included in the repository, users should obtain or generate them according to the project instructions and the original data-access conditions.
+
+## Pipeline data paths
+
+The main pipeline is:
+
+```text
+split_strategy_pipeline_raw_arc.py
+```
+
+Depending on the current configuration, the pipeline may expect `clean_data.csv` either:
+
+1. in the repository `data/` folder, or
+2. next to `split_strategy_pipeline_raw_arc.py`.
+
+Before running the workflow, check the `DATA_DIR` or equivalent path setting inside the pipeline script.
 
 ## Citation requirements
 
-When using this workflow, cite:
+When using this workflow or the included derived data file, cite:
 
-1. The associated manuscript.
-2. The ARC--MOF data paper.
-3. The ARC--MOF dataset/data record used to obtain the raw files.
+1. the associated manuscript,
+2. the ARC--MOF data paper,
+3. the ARC--MOF dataset/data record,
+4. this software repository, if used directly.
 
-## Manuscript data-availability text
+## Safe manuscript wording
 
-A safe data-availability statement should include:
+A safe manuscript data/code availability statement should say that:
 
-- repository/archive URL for this code package;
-- exact ARC--MOF release/version;
-- download date;
-- DOI or source record URL;
-- raw filenames used to build `clean_data.csv`;
-- local preprocessing script or README used to generate the working table.
+* the repository includes code, documentation, compact source-data tables, figure-redraw files, and `data/clean_data.csv`;
+* `clean_data.csv` is a processed ARC--MOF-derived benchmark table;
+* raw ARC--MOF source files and full structural/database files are not redistributed;
+* users should obtain original ARC--MOF source files from the original providers;
+* the ARC--MOF paper and data record should be cited.
 
-Do not submit the manuscript with placeholders such as `INSERT_ARC--MOF_RELEASE_OR_VERSION`.
+Do not describe `clean_data.csv` as the original ARC--MOF database. It is a derived benchmark table.
