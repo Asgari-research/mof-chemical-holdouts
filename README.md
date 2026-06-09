@@ -530,70 +530,6 @@ credentials or tokens
 
 ---
 
-## Recommended `.gitignore` policy
-
-Because this repository intentionally includes `data/clean_data.csv` but excludes raw ARC--MOF source files and large generated outputs, the `.gitignore` should allow only the curated processed data file inside `data/`.
-
-Recommended data section:
-
-```gitignore
-# Data policy
-data/*
-!data/
-!data/README.md
-!data/clean_data.csv
-```
-
-Recommended full additions:
-
-```gitignore
-# Python
-__pycache__/
-*.pyc
-.ipynb_checkpoints/
-
-# Local environments
-.venv/
-env/
-*.egg-info/
-
-# Logs and temporary outputs
-*.log
-*.tmp
-temp/
-tmp/
-
-# Large generated benchmark outputs
-paper1_split_strategy_outputs*/
-outputs/
-generated_outputs/
-full_predictions/
-models/
-model_binaries/
-
-# Raw ARC--MOF and local source files
-geometric_properties.csv
-post_comb_vsa-CO2.csv
-methane.csv
-geo-clusters.csv
-mc-clusters.csv
-func-clusters.csv
-flig-clusters.csv
-all_topology_lists.csv
-
-# Archives
-*.zip
-*.tar
-*.tar.gz
-*.7z
-
-# OS/editor
-.DS_Store
-Thumbs.db
-.vscode/
-```
-
----
 
 ## Reproducing manuscript figures
 
@@ -618,23 +554,7 @@ The structural-audit figure is included as finalized artwork in the package. It 
 
 ---
 
-## Data availability statement
 
-This repository includes:
-
-- code for the split-strategy benchmark,
-- `data/clean_data.csv`, a processed ARC--MOF-derived benchmark table,
-- compact source-data and plot-data files,
-- regenerated manuscript and SI figures,
-- figure-regeneration scripts,
-- documentation for required local inputs,
-- reproducibility and submission-check guidance.
-
-This repository does not redistribute raw ARC--MOF database files, raw third-party structural databases, full ARC--MOF CIF archives, large full-prediction files, or fitted model objects. Users who need the original ARC--MOF source data should obtain them from the original data source and follow the original license and citation requirements.
-
-Large full-prediction files and fitted models are intentionally excluded from version control and should be regenerated locally.
-
----
 
 ## Citation
 
