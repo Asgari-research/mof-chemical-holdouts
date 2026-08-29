@@ -570,9 +570,8 @@ The structural-audit figure is included as finalized artwork in the package. It 
 If you use this repository, please cite the associated manuscript:
 
 ```bibtex
-@article{DiBellaAbaeiHadjiThomasAsgari2026SplitDefinesClaim,
+@article{paper,
   title   = {The Validation Split Defines the Discovery Claim in AI-Guided MOF Screening},
-  author  = {Di Bella, Angelo and Abaei, Shayan and Hadji-Thomas, Andre and Asgari, Mehrdad},
   year    = {2026},
   note    = {Manuscript in preparation}
 }
