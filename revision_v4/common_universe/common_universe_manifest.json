@@ -1,0 +1,13 @@
+{
+  "n": 214531,
+  "unique_ids": 214531,
+  "id_order_sha256": "5ea76efddb462557b6f4222e0a0c923da873eae1a82e1f696e57f030d01a3552",
+  "label_columns": [
+    "geo_cluster",
+    "metal_cluster",
+    "func_cluster",
+    "linker_cluster",
+    "topology_label"
+  ],
+  "singleton_groups_retained": true
+}

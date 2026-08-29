@@ -1,0 +1,6 @@
+group_family,source_column,total_rows,non_null_rows,missing_rows,raw_groups,singleton_groups_removed_original,singleton_rows_removed_original,eligible_rows_original,eligible_groups_original,eligible_group_size_min,eligible_group_size_q25,eligible_group_size_median,eligible_group_size_q75,eligible_group_size_max,eligible_group_size_mean
+geometry,geo_cluster,263744,263744,0,146411,78631,78631,185113,67780,2,2.0,2.0,3.0,26,2.731085866037179
+metal,metal_cluster,263744,256328,7416,2447,826,826,255502,1621,2,2.0,4.0,12.0,35572,157.61998766193707
+functional,func_cluster,263744,214531,49213,43744,16319,16319,198212,27425,2,2.0,3.0,5.0,2954,7.227420237010027
+linker,linker_cluster,263744,256328,7416,125220,53796,53796,202532,71424,2,2.0,2.0,3.0,356,2.8356294802867383
+topology,topology_label,263744,263744,0,47,0,0,263744,47,52,89.0,175.0,800.0,99167,5611.574468085107

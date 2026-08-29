@@ -1,29 +1,32 @@
 cff-version: 1.2.0
 message: "If you use this repository, please cite the associated manuscript and the ARC-MOF dataset/data paper."
-title: "The Split Defines the Claim: A Validation Grammar for Chemically Auditable MOF Discovery"
+title: "The Validation Split Defines the Discovery Claim in AI-Guided MOF Screening"
+type: software
 authors:
-  - family-names: Di Bella
-    given-names: Angelo
-  - family-names: Abaei
-    given-names: Shayan
-  - family-names: Hadji-Thomas
-    given-names: Andre
-  - family-names: Asgari
-    given-names: Mehrdad
+  - family-names: "Asgari"
+    given-names: "Mehrdad"
+  - family-names: "Abaei"
+    given-names: "Shayan"
+  - family-names: "Di Bella"
+    given-names: "Angelo"
+  - family-names: "Hadji-Thomas"
+    given-names: "Andre"
+  - family-names: "Alimardani"
+    given-names: "Hosein"
 repository-code: "https://github.com/Asgari-research/mof-chemical-holdouts"
-date-released: "2026-05-25"
 license: MIT
-
 preferred-citation:
   type: article
-    title: "The Split Defines the Claim: A Validation Grammar for Chemically Auditable MOF Discovery"
-authors:
-    - family-names: Di Bella
-      given-names: Angelo
-    - family-names: Abaei
-      given-names: Shayan
-    - family-names: Hadji-Thomas
-      given-names: Andre
-    - family-names: Asgari
-      given-names: Mehrdad
+  title: "The Validation Split Defines the Discovery Claim in AI-Guided MOF Screening"
+  authors:
+    - family-names: "Asgari"
+      given-names: "Mehrdad"
+    - family-names: "Abaei"
+      given-names: "Shayan"
+    - family-names: "Di Bella"
+      given-names: "Angelo"
+    - family-names: "Hadji-Thomas"
+      given-names: "Andre"
+    - family-names: "Alimardani"
+      given-names: "Hosein"
   year: 2026

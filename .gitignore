@@ -51,3 +51,19 @@ all_topology_lists.csv
 Thumbs.db
 .vscode/
 .idea/
+
+# V4 bulky archival outputs - keep outside normal Git history
+revision_v4/common_universe/checkpoints/
+revision_v4/generalization/checkpoints/
+revision_v4/common_universe/common_universe_ids.csv
+revision_v4/group_audit/group_size_distributions.csv
+revision_v4/historical_oos/*.csv.gz
+revision_v4/README_HANDOVER_ORIGINAL.md
+
+# V4 bulky archival outputs - keep outside normal Git history
+revision_v4/common_universe/checkpoints/
+revision_v4/generalization/checkpoints/
+revision_v4/common_universe/common_universe_ids.csv
+revision_v4/group_audit/group_size_distributions.csv
+revision_v4/historical_oos/*.csv.gz
+revision_v4/README_HANDOVER_ORIGINAL.md

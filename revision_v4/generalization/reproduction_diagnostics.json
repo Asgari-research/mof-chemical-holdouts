@@ -1,0 +1,46 @@
+{
+  "historical_outer_memberships_source": "recovered historical_oos fold/repeat labels",
+  "all_historical_train_test_sizes_match": true,
+  "no_retuning_performed": true,
+  "original_non_python_package_versions_recovered": false,
+  "current_scikit_learn": "1.9.0",
+  "max_abs_differences": {
+    "r2_abs_diff": 0.011317962096716039,
+    "mae_abs_diff": 0.0005191702445579982,
+    "spearman_abs_diff": 0.0024012716053128935,
+    "kendall_abs_diff": 0.0021312484232207662,
+    "top5_recovery_abs_diff": 0.006065200909780133,
+    "top5_enrichment_abs_diff": 0.12127872736542678
+  },
+  "material_rows": [
+    {
+      "descriptor_family": "compact_geometry",
+      "split_family": "random",
+      "fold_id": 1,
+      "max_core_metric_abs_diff": 0.006065200909780133,
+      "mismatch_diagnosis": "thresholded Top-5 membership sensitivity under the current RF package; exact historical memberships and parameters used"
+    },
+    {
+      "descriptor_family": "compact_geometry",
+      "split_family": "random",
+      "fold_id": 4,
+      "max_core_metric_abs_diff": 0.005686125852918833,
+      "mismatch_diagnosis": "thresholded Top-5 membership sensitivity under the current RF package; exact historical memberships and parameters used"
+    },
+    {
+      "descriptor_family": "enriched_interpretable",
+      "split_family": "topology_grouped",
+      "fold_id": 1,
+      "max_core_metric_abs_diff": 0.005711775043936745,
+      "mismatch_diagnosis": "thresholded Top-5 membership sensitivity under the current RF package; exact historical memberships and parameters used"
+    },
+    {
+      "descriptor_family": "enriched_interpretable",
+      "split_family": "topology_grouped",
+      "fold_id": 2,
+      "max_core_metric_abs_diff": 0.011317962096716039,
+      "mismatch_diagnosis": "R2 sensitivity on a low-variance topology fold under the current RF package; MAE and derived RMSE differences remain <=0.005"
+    }
+  ],
+  "scientific_gate": "pass_with_diagnosed_current_environment_differences"
+}

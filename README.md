@@ -2,7 +2,7 @@
 
 Reproducibility package for the manuscript:
 
-**The Split Defines the Claim: A Validation Grammar for Chemically Auditable MOF Discovery**
+**The Validation Split Defines the Discovery Claim in AI-Guided MOF Screening**
 
 This repository supports a chemically auditable split-strategy benchmark for machine-learning-guided metal--organic framework (MOF) adsorption screening. The workflow compares random train/test splits with chemically and structurally grouped holdouts while keeping targets, descriptor families, model classes, hyperparameter logic, and metrics matched.
 
@@ -13,6 +13,15 @@ In this project, the validation split is treated as a scientific variable:
 > **The split defines the claim.**
 
 ---
+
+
+## V4 reproducibility release (August 2026)
+
+The repository includes `revision_v4/`, containing the targeted validation and reproducibility analyses supporting the current manuscript: training–held-out generalization gaps, a 214,531-structure fixed-universe sensitivity analysis, compact group-construction audits, exact outer-OOS shortlist summaries, numerical traceability records, and analysis scripts. The synchronized V4 manuscript source is under `manuscript/v4/`.
+
+**Processed input note.** The public repository stores the processed benchmark table as `data/clean_data.zip`; extract it to obtain `clean_data.csv` before running workflows that require the uncompressed CSV. The ZIP is a derived ARC–MOF benchmark artifact, not the original ARC–MOF release.
+
+**Historical reproducibility note.** Exact historical non-Python package versions and the complete fitted-model/prediction archive were not recovered. The V4 environment and recovered OOS evidence are reported explicitly rather than being conflated with the historical environment.
 
 ## Repository overview
 
@@ -76,7 +85,7 @@ The manuscript uses **CO2 uptake at 0.15 bar** as the anchor adsorption target. 
 This repository includes one processed ARC--MOF-derived benchmark table:
 
 ```text
-data/clean_data.csv
+data/clean_data.zip
 ```
 
 `clean_data.csv` is a derived, machine-learning-ready benchmark table prepared for the present split-strategy study. It was generated from ARC--MOF source data through data cleaning, identifier normalization, adsorption-target organization, descriptor preparation, and construction of benchmark-ready inputs.
@@ -142,7 +151,7 @@ The repository remains a compact reproducibility, source-data, and figure-genera
 
 ## Additional local files for full regeneration
 
-The included `data/clean_data.csv` supports rerunning the benchmark from the processed working table. Some full-regeneration or consistency-check workflows may require additional local grouped metadata files.
+The included `data/clean_data.zip` supports rerunning the benchmark from the processed working table. Some full-regeneration or consistency-check workflows may require additional local grouped metadata files.
 
 Depending on the workflow stage, the following additional files may be required locally:
 
@@ -298,10 +307,10 @@ After placing the required local input files in the expected location, run:
 python split_strategy_pipeline_raw_arc.py
 ```
 
-The included processed table is:
+The included processed table is distributed as:
 
 ```text
-data/clean_data.csv
+data/clean_data.zip   # contains clean_data.csv
 ```
 
 Depending on the current configuration, the pipeline may expect `clean_data.csv` either:
@@ -380,11 +389,11 @@ git lfs track "figure_redraw_package_v2/data/si/figure_data_csv/si_v8_target_dis
 git add .gitattributes
 ```
 
-If `data/clean_data.csv` is large, track it with Git LFS as well:
+If `data/clean_data.zip` is large, track it with Git LFS as well:
 
 ```bash
 git lfs install
-git lfs track "data/clean_data.csv"
+git lfs track "data/clean_data.zip"
 git add .gitattributes
 ```
 
@@ -491,7 +500,7 @@ requirements.txt
 environment.yml
 split_strategy_pipeline_raw_arc.py
 data/README.md
-data/clean_data.csv
+data/clean_data.zip
 docs/
 figure_redraw_package_v2/README.md
 figure_redraw_package_v2/requirements.txt
@@ -562,7 +571,7 @@ If you use this repository, please cite the associated manuscript:
 
 ```bibtex
 @article{DiBellaAbaeiHadjiThomasAsgari2026SplitDefinesClaim,
-  title   = {The Split Defines the Claim: A Validation Grammar for Chemically Auditable MOF Discovery},
+  title   = {The Validation Split Defines the Discovery Claim in AI-Guided MOF Screening},
   author  = {Di Bella, Angelo and Abaei, Shayan and Hadji-Thomas, Andre and Asgari, Mehrdad},
   year    = {2026},
   note    = {Manuscript in preparation}
@@ -594,7 +603,7 @@ This repository is distributed under the MIT License unless otherwise noted.
 
 The license applies to code and repository documentation. It does not grant redistribution rights for raw third-party database files, including ARC--MOF data, unless those rights are provided by the original data source.
 
-The included `data/clean_data.csv` is a processed benchmark table derived from ARC--MOF. Users should follow the original ARC--MOF license and citation requirements when using this derived data file.
+The included `data/clean_data.zip` is a processed benchmark table derived from ARC--MOF. Users should follow the original ARC--MOF license and citation requirements when using this derived data file.
 
 ---
 
