@@ -1,0 +1,3 @@
+population,n,pooled_mae,population_change_vs_original,interpretation
+original_topology_oos,263744,0.4571195937416463,0,evaluation-only population ablation; predictions and training fits unchanged
+exclude_rare_topology_other,259846,0.457057274771129,-3898,evaluation-only population ablation; predictions and training fits unchanged

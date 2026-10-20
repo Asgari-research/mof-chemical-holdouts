@@ -1,0 +1,9 @@
+{
+  "accessible_original_files": 0,
+  "aggregate_has_individual_repeat_predictions": false,
+  "aggregate_has_repeat_count": true,
+  "aggregate_rows": 177411,
+  "manifest_rows": 30,
+  "reason": "The compact random archive stores one mean prediction per structure. Expanding it would fabricate repeat-level independence.",
+  "status": "BLOCKED_MISSING_REPEAT_LEVEL_PREDICTIONS"
+}
