@@ -3,10 +3,10 @@
 This repository includes a processed ARC--MOF-derived benchmark table for reproducibility:
 
 ```text
-data/clean_data.csv
+data/clean_data.zip
 ```
 
-The included `clean_data.csv` file is a derived, machine-learning-ready benchmark table prepared for the present study. It was generated from ARC--MOF source data through data cleaning, identifier normalization, adsorption-target organization, descriptor preparation, and construction of benchmark-ready inputs. It should not be interpreted as the original ARC--MOF release.
+The archive contains `clean_data.csv`, a derived, machine-learning-ready benchmark table prepared for the present study. Extract it before running a workflow that requires the CSV. It should not be interpreted as the original ARC--MOF release.
 
 ## Original ARC--MOF source
 
@@ -42,10 +42,10 @@ Users should follow the original ARC--MOF license and attribution requirements.
 Included in this repository:
 
 ```text
-data/clean_data.csv
+data/clean_data.zip
 ```
 
-This file is included to support transparency, reproducibility, and reuse of the reported benchmark analysis.
+This archive is included to support transparency, reproducibility, and reuse of the reported benchmark analysis.
 
 ## Files not redistributed
 
@@ -84,7 +84,7 @@ The main pipeline is:
 split_strategy_pipeline_raw_arc.py
 ```
 
-Depending on the current configuration, the pipeline may expect `clean_data.csv` either:
+After extracting `clean_data.zip`, the pipeline may expect `clean_data.csv` either:
 
 1. in the repository `data/` folder, or
 2. next to `split_strategy_pipeline_raw_arc.py`.

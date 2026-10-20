@@ -4,9 +4,9 @@ This folder contains the processed benchmark input table used to support the che
 
 ## Included file
 
-- `clean_data.csv`
+- `clean_data.zip` (contains `clean_data.csv`)
 
-`clean_data.csv` is a processed ARC--MOF-derived benchmark table prepared for this study. It was generated from ARC--MOF source data through data cleaning, identifier normalization, adsorption-target organization, descriptor preparation, and construction of machine-learning-ready inputs. It should therefore be treated as a derived benchmark table, not as the original ARC--MOF release.
+`clean_data.csv` inside the ZIP is a processed ARC--MOF-derived benchmark table prepared for this study. It was generated from ARC--MOF source data through data cleaning, identifier normalization, adsorption-target organization, descriptor preparation, and construction of machine-learning-ready inputs. It should therefore be treated as a derived benchmark table, not as the original ARC--MOF release.
 
 The file is included to support transparency, reproducibility, and reuse of the reported split-strategy benchmark. It allows users to inspect and rerun the benchmark workflow without reconstructing the main working table from raw ARC--MOF source files.
 
@@ -64,7 +64,7 @@ These files are not redistributed here unless explicitly permitted and documente
 
 ## How to use
 
-To run the benchmark pipeline using the included processed table, either:
+Extract `clean_data.zip`, then either:
 
 1. keep `clean_data.csv` in this `data/` folder and set the pipeline data path to `data/`, or
 2. copy `clean_data.csv` next to `split_strategy_pipeline_raw_arc.py`, depending on the current pipeline configuration.

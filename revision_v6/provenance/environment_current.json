@@ -1,0 +1,13 @@
+{
+  "packages": {
+    "matplotlib": "3.10.5",
+    "numpy": "1.26.4",
+    "pandas": "2.3.2",
+    "pytest": "9.0.3",
+    "scikit-learn": "1.9.0",
+    "scipy": "1.17.1"
+  },
+  "platform": "Windows-11-10.0.26220-SP0",
+  "provenance_scope": "current V6 saved-data analysis environment; not claimed as historical benchmark environment",
+  "python": "3.13.13 (tags/v3.13.13:01104ce, Apr  7 2026, 19:25:48) [MSC v.1944 64 bit (AMD64)]"
+}

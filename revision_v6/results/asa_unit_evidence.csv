@@ -1,0 +1,21 @@
+UC_volume,Density,ASA,vASA,gASA,filename_norm,ASA_interpretation,gASA_interpretation
+1993.43,0.722574,441.926,2216.91,3068.08,DB0-m12_o10_bcu,angstrom^2 per unit cell,m^2 per g
+3152.65,0.511744,683.824,2169.05,4238.54,DB0-m12_o12_bcu,angstrom^2 per unit cell,m^2 per g
+4383.66,0.480286,911.777,2079.94,4330.64,DB0-m12_o13_bcu,angstrom^2 per unit cell,m^2 per g
+2922.0,0.720538,647.139,2214.71,3073.7,DB0-m12_o14_bcu,angstrom^2 per unit cell,m^2 per g
+2924.99,0.709598,556.302,1901.9,2680.25,DB0-m12_o14_o22_f0_bcu,angstrom^2 per unit cell,m^2 per g
+3501.96,0.453051,722.366,2062.75,4553.02,DB0-m12_o19_bcu,angstrom^2 per unit cell,m^2 per g
+2947.3,0.538312,555.163,1883.63,3499.15,DB0-m12_o19_hex,angstrom^2 per unit cell,m^2 per g
+4123.14,0.405768,848.516,2057.93,5071.7,DB0-m12_o19_o21_f0_bcu,angstrom^2 per unit cell,m^2 per g
+5534.5,0.315498,973.116,1758.27,5573.01,DB0-m12_o20_bcu,angstrom^2 per unit cell,m^2 per g
+5754.27,0.32599,1073.69,1865.9,5723.79,DB0-m12_o20_o25_f0_bcu,angstrom^2 per unit cell,m^2 per g
+4405.38,0.399401,852.785,1935.78,4846.71,DB0-m12_o21_hex,angstrom^2 per unit cell,m^2 per g
+5680.62,0.398718,1043.73,1837.35,4608.15,DB0-m12_o25_hex,angstrom^2 per unit cell,m^2 per g
+8371.52,0.292815,1352.24,1615.28,5516.39,DB0-m12_o26_bcu,angstrom^2 per unit cell,m^2 per g
+6747.22,0.351463,1211.5,1795.55,5108.8,DB0-m12_o2_o8_f0_bcu,angstrom^2 per unit cell,m^2 per g
+2213.77,0.724242,414.791,1873.69,2587.1,DB0-m12_o30_o12_tfz-d,angstrom^2 per unit cell,m^2 per g
+3032.49,0.624098,624.042,2057.85,3297.32,DB0-m12_o30_o18_tfz-d,angstrom^2 per unit cell,m^2 per g
+2429.59,0.65715,440.038,1811.16,2756.08,DB0-m12_o30_o19_tfz-d,angstrom^2 per unit cell,m^2 per g
+2813.64,0.581631,501.446,1782.2,3064.14,DB0-m12_o30_o20_tfz-d,angstrom^2 per unit cell,m^2 per g
+2774.6,0.591021,506.72,1826.28,3090.05,DB0-m12_o30_o21_tfz-d,angstrom^2 per unit cell,m^2 per g
+2999.77,0.59213,600.154,2000.67,3378.76,DB0-m12_o30_o23_tfz-d,angstrom^2 per unit cell,m^2 per g
