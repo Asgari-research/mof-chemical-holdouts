@@ -1,0 +1,17 @@
+{
+  "n": 177411,
+  "features": [
+    "Density",
+    "ASA",
+    "AVA",
+    "AVAf",
+    "POAVA",
+    "Di",
+    "Df",
+    "Dif"
+  ],
+  "scaling": "train-only median imputation and standard scaling per topology fold",
+  "spearman_distance_vs_topology_absolute_error": -0.383386074049511,
+  "spearman_distance_vs_topology_minus_random_error": -0.14052911000355764,
+  "elapsed_seconds": 11.571078500001022
+}

@@ -1,0 +1,9 @@
+metric,recovered_original,prior_v6,difference,status
+common_oos_population_n,177411.0,177411.0,0.0,MATCH
+k,8871.0,8871.0,0.0,MATCH
+common_shortlist_n,2953.0,2953.0,0.0,MATCH
+random_only_n,5918.0,5918.0,0.0,MATCH
+topology_only_n,5918.0,5918.0,0.0,MATCH
+random_topology_jaccard,0.19967543444451957,0.1996754344445195,8.326672684688674e-17,MATCH
+random_true_top5_recovery,0.6202231991883665,0.6202231991883665,0.0,MATCH
+topology_true_top5_recovery,0.24833727877353173,0.2483372787735317,2.7755575615628914e-17,MATCH
