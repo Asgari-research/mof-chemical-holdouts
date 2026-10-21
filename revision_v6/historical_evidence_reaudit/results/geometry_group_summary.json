@@ -1,0 +1,13 @@
+{
+  "evaluated_master_rows": 263744,
+  "raw_groups": 146411,
+  "missing_rows": 0,
+  "singleton_groups_excluded": 78631,
+  "singleton_rows_excluded": 78631,
+  "eligible_groups": 67780,
+  "eligible_rows": 185113,
+  "eligible_group_median_size": 2.0,
+  "eligible_group_max_size": 26,
+  "eligible_groups_size_2_or_3_fraction": 0.8322809088226616,
+  "eligible_rows_in_size_2_or_3_fraction": 0.6996429208105319
+}

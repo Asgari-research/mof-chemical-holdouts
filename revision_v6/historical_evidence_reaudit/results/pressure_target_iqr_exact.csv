@@ -1,0 +1,5 @@
+target_slug,target_column,population_n,q25_mmol_g,q75_mmol_g,iqr_mmol_g
+co2_0015bar,uptake(mmol/g) CO2 at 0.015 bar,263744,0.057259,0.15491349999999998,0.09765449999999998
+co2_015bar,uptake(mmol/g) CO2 at 0.15 bar,263744,0.319929,1.2710365000000001,0.9511075000000001
+ch4_58bar,uptake(mmol/g) methane at 5.8 bar,263744,3.1297385,5.229525000000001,2.0997865000000004
+ch4_65bar,uptake(mmol/g) methane at 65 bar,263744,10.942957,19.972659,9.029702
