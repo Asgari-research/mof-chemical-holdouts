@@ -1,0 +1,142 @@
+% ADVANCED SCIENCE / FIGURE 1 / VECTOR-ONLY TIKZ ARTWORK
+% Fully editable: no embedded bitmap, image-generation output, or external icon files.
+% Compile with: xelatex -interaction=nonstopmode -halt-on-error Figure1_Validation_Workflow_v2.tex
+% Uses Arimo, an Arial-compatible open alternative available on most TeX systems.
+% If you have a licensed local Arial installation, change the font to Arial.
+\documentclass[tikz,border=4mm]{standalone}
+\usepackage{fontspec}
+\setmainfont{Arimo}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\definecolor{ink}{HTML}{183047}
+\definecolor{secondaryink}{HTML}{465D70}
+\definecolor{muted}{HTML}{718394}
+\definecolor{border}{HTML}{DDE6ED}
+\definecolor{surface}{HTML}{FAFCFD}
+\definecolor{cobalt}{HTML}{1764A5}
+\definecolor{teal}{HTML}{07827E}
+\definecolor{indigo}{HTML}{6C56A5}
+\definecolor{copper}{HTML}{C45D35}
+\definecolor{ocean}{HTML}{20857D}
+\definecolor{slate}{HTML}{41647D}
+\tikzset{
+    pipe/.style={-{Latex[length=2.3mm,width=1.6mm]},draw=ink!70,line width=1.2pt,line cap=round,line join=round},
+    iconline/.style={line width=.85pt,line cap=round,line join=round},
+}
+\newcommand{\stagecard}[8]{%
+  \begin{scope}[shift={(#1,#2)}]
+    % Quiet shadow for depth, kept as editable vector geometry.
+    \fill[ink!5,rounded corners=3.5mm] (.055,-3.655) rectangle (6.005,-.055);
+    \draw[draw=border,line width=.8pt,fill=white,rounded corners=3.5mm]
+      (0,-3.60) rectangle (5.95,0);
+    \draw[draw=#7,line width=2.5pt,line cap=round] (.34,-.07)--(5.60,-.07);
+    % Number and title.
+    \fill[#7] (.45,-.54) circle (.205);
+    \node[font=\bfseries\fontsize{9}{10}\selectfont,text=white]
+      at (.45,-.54) {#3};
+    \node[anchor=west,font=\bfseries\fontsize{12}{13}\selectfont,text=ink]
+      at (.83,-.54) {#4};
+    \node[anchor=west,font=\bfseries\fontsize{7.45}{9}\selectfont,text=#7]
+      at (.36,-1.065) {\textbf{#5}};
+    \draw[draw=border,line width=.55pt] (.35,-1.31)--(5.58,-1.31);
+    % Precise text blocks. Intentionally limited to three lines for print readability.
+    \node[anchor=north west,text=ink,align=left,text width=5.23cm,
+          inner sep=0pt,font=\fontsize{9.35}{12.2}\selectfont]
+      at (.36,-1.57) {#6};
+    % Content tag: helps the reader immediately understand this step.
+    \node[anchor=south west,fill=#7!9,rounded corners=1.4mm,
+          inner xsep=5pt,inner ysep=3.1pt,font=\bfseries\fontsize{7.9}{9}\selectfont,text=#7]
+      at (.35,-3.40) {#8};
+  \end{scope}%
+}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % Editorial heading (native text and vector rules).
+  \node[anchor=west,font=\bfseries\fontsize{16}{18}\selectfont,text=ink]
+    at (0,.10) {How the validation split changes a MOF screening claim};
+  \node[anchor=west,font=\fontsize{9.2}{11}\selectfont,text=secondaryink]
+    at (0,-.45) {Six-step workflow for comparing random and chemically grouped holdouts};
+  \draw[draw=border,line width=.7pt] (0,-.70)--(19.05,-.70);
+
+  % Cards 1→2→3 on upper row, then down to 4←5←6 on lower row.
+  \stagecard{0}{-1.06}{1}{Data foundation}{INPUTS + GROUP LABELS}{%
+    \textbullet\ ARC--MOF uptake targets\\
+    \textbullet\ Descriptors: model inputs\\
+    \textbullet\ Group labels: define holdouts}{cobalt}{Four adsorption targets}
+
+  \stagecard{6.55}{-1.06}{2}{Validation design}{WHAT IS HELD OUT?}{%
+    \textbullet\ Five random 20\% test splits\\
+    \textbullet\ Five grouped folds\\
+    \textbullet\ Five group-label families}{teal}{Six validation regimes}
+
+  \stagecard{13.10}{-1.06}{3}{Model evaluation}{MATCHED COMPARISON}{%
+    \textbullet\ Matched models and metrics\\
+    \textbullet\ Compare two descriptor sets\\
+    \textbullet\ Track coverage differences}{indigo}{Ridge \enspace RF \enspace HGB \enspace MLP}
+
+  \stagecard{13.10}{-5.35}{4}{Error patterns}{WHAT FAILS TO TRANSFER?}{%
+    \textbullet\ Held-out R\textsuperscript{2} and MAE\\
+    \textbullet\ Errors by fold and group\\
+    \textbullet\ Gas and pressure dependence}{copper}{Fold- and family-level evidence}
+
+  \stagecard{6.55}{-5.35}{5}{Candidate ranking}{DO THE SAME MOFs SURVIVE?}{%
+    \textbullet\ Reference top-5\% recovery\\
+    \textbullet\ Predicted-list Jaccard\\
+    \textbullet\ Common out-of-sample set}{ocean}{Recovery ≠ agreement}
+
+  \stagecard{0}{-5.35}{6}{Evidence and limits}{WHAT CAN WE CLAIM?}{%
+    \textbullet\ Inspect difficult MOFs\\
+    \textbullet\ Trace cases to source data\\
+    \textbullet\ Define evidence boundaries}{slate}{Retrospective validation evidence}
+
+  % Six fully editable custom TikZ pictograms (no stock images).
+  % 1: database records.
+  \begin{scope}[shift={(5.32,-1.62)},draw=cobalt,iconline]
+    \draw (0,.22) ellipse (.26 and .085); \draw (-.26,.22)--(-.26,-.19) ( .26,.22)--(.26,-.19);
+    \draw (0,-.01) ellipse (.26 and .085); \draw (0,-.19) ellipse (.26 and .085);
+  \end{scope}
+  % 2: structured grouping/holdout.
+  \begin{scope}[shift={(11.85,-1.57)},draw=teal,iconline]
+    \draw (0,.18)--(0,-.01) (-.25,-.01)--(.25,-.01) (-.25,-.01)--(-.25,-.24) (.25,-.01)--(.25,-.24);
+    \filldraw[fill=white] (0,.21) circle (.075) (-.25,-.26) circle (.075) (.25,-.26) circle (.075);
+  \end{scope}
+  % 3: matched experiments depicted as aligned fold strips.
+  \begin{scope}[shift={(18.42,-1.60)},draw=indigo,iconline]
+    \foreach \y in {.16,0,-.16} {\draw (-.31,\y)--(.31,\y);}
+    \fill[indigo!28] (-.31,-.225) rectangle (-.13,.225);
+    \draw (-.31,-.225) rectangle (.31,.225);
+  \end{scope}
+  % 4: fold-level errors (schematic point plot, no implied data values).
+  \begin{scope}[shift={(18.41,-5.91)},draw=copper,iconline]
+    \draw (-.29,-.25)--(-.29,.23) (-.29,-.25)--(.30,-.25);
+    \fill[copper] (-.15,-.07) circle (.045) (.01,.11) circle (.045) (.23,-.12) circle (.045);
+  \end{scope}
+  % 5: selected and discarded candidate symbols.
+  \begin{scope}[shift={(11.87,-5.91)},draw=ocean,iconline]
+    \foreach \x in {-.23,0,.23} {\draw (\x,0) circle (.085);}
+    \fill[ocean] (-.23,0) circle (.045) (.23,0) circle (.045);
+    \draw[thick] (-.29,-.24)--(-.17,-.12);
+  \end{scope}
+  % 6: audit/magnification.
+  \begin{scope}[shift={(5.30,-5.92)},draw=slate,iconline]
+    \draw (-.06,.07) circle (.20); \draw (.10,-.09)--(.32,-.30);
+    \fill[slate] (-.15,.13) circle (.034) (.03,.02) circle (.034);
+  \end{scope}
+
+  % Directional connectors; the arrows, not the grid, define the reading order.
+  \draw[pipe] (6.02,-2.84)--(6.47,-2.84);
+  \draw[pipe] (12.57,-2.84)--(13.02,-2.84);
+  \draw[pipe] (16.07,-4.74)--(16.07,-5.25);
+  \draw[pipe] (13.02,-7.11)--(12.57,-7.11);
+  \draw[pipe] (6.47,-7.11)--(6.02,-7.11);
+
+  % A restrained bottom band states the necessary inference boundary.
+  \draw[fill=surface,draw=border,rounded corners=2.5mm,line width=.7pt]
+    (0,-9.33) rectangle (19.05,-10.22);
+  \fill[teal] (.35,-9.77) circle (.095);
+  \node[anchor=west,text=ink,font=\bfseries\fontsize{9.6}{11}\selectfont]
+    at (.58,-9.77) {Interpretation boundary};
+  \node[anchor=west,text=secondaryink,font=\fontsize{8.8}{10.5}\selectfont]
+    at (4.57,-9.77) {A holdout tests transfer in that setting; it does not establish mechanisms or prospective success.};
+\end{tikzpicture}
+\end{document}

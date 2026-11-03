@@ -1,0 +1,23 @@
+figure,filename,sha256,bytes,evidence,reproduction_scope
+Main 1,Figure1_Main.pdf,7a8e1c2ce0221b8f900d8dd5c324dc63ff67227a3b309f379d16da9194cb8139,52159,TikZ vector workflow; matching editable source supplied,Exact editable source; compiled approved PDF frozen
+Main 2,figure2_v8_split_family_severity_polished.pdf,616b2c9d513b945b51ae8b159b2b2aa21ab660c843714dd91112c1be08c090c5,31473,Historical split-severity plotting CSV in public figure_redraw_package_v2,Numerical plot-data available; final typography/layout may differ
+Main 3,v6_matched_random_vs_topology.pdf,983465ed9d418afd74392145ad1f14796f83d03c17b994812e321c963f66ebd1,20144,Matched-control five-fold CSV and plotting/replot_v6_controls.py,Five-fold summary regeneration; not a fresh model fit
+Main 4,figure3_revised_single_panel.pdf,296c92b83ced74b6090e5544e9b71481e8ea1b64268f61dee063c1223574a2f2,62858,Historical target-by-split CSV in figure_redraw_package_v2,Numerical plot-data available; final formatting may differ
+Main 5,figure6_v8_shift_and_descriptor_space_polished.pdf,d3a9450eacddaabb9dc24982dfcfce279d82f7310fcf38a2d0f74b33d6b4edb0,98270,Pinned public descriptor-shift CSV in figure_redraw_package_v2,Historical numeric source; exact final hybrid-artwork regeneration not certified
+Main 6,figure5_revised_uniform_markers.pdf,c441379b30d0060d201526a138b908f8d3c0908e160bf88a588040519c5f8e41,41476,Historical difficult-group CSV plus original per-group aggregation,"Source table available; display says Pore-regime, upstream boundaries not verified"
+Main 7,Figure_main_structural_audit_grouped_extrapolation_v7_final.pdf,c5db150042b38b9b83958b0812a7f267191b0f374afae5aa4f2cdbfa4a3b6e88,5385453,Original artwork and numeric table excerpts; original CIF/render settings not recovered,Approved unchanged original artwork; no independent structural redraw
+Main 8,figure4_revised_percent.pdf,9471ca8c2ff360683caa403b5aa62e22782497c95f32c5f98f8d2d07e125628c,30516,Historical screening metrics plotting CSV,Numerical source available; percentages/caption definitions must stay matched
+Main 9,figure7_revised_spearman_0_1.pdf,c4c6f7a326fd463c2b899eb54ff5cd962ba138ea5a135576b2c40c9e9c7456ba,35312,Historical top-5% shortlist and rank plotting CSV,Numerical source available; exact final style may differ
+SI S1,si_v7_group_size_summary_logscale.pdf,304e77a590c596a8fea06675f746ccc764eb665a9528932b43a9f9e0acb2320f,28803,Historical group-size summary CSV,Source available
+SI S2,si_v8_target_distributions_clear_labels.pdf,a561a8a89219fe18c3878a06b0dd4fdc73f382041052257a56bad375956c00e3,308567,Raw target-distribution plot-data CSV not recovered in V6 handoff,Exact redraw from original target rows not certified
+SI S3,si_v8_prediction_scatter_panels_clear_labels.pdf,1931683b6f06031d41749fd9d822e9de0a9405a69fa6d17c638222119009cb36,684378,Large plotted-prediction CSV at pinned public Git path,Source linked; source inputs not bundled in the handoff
+SI S4,si_v8_pld_decile_errors_clear_labels.pdf,a8acbd43c7d388e215f553fc3fa1aa47ca98fd02fd57cdd8e11c19c49e7769f1,31543,Historical PLD-decile CSV,Source available
+SI S5,si_heatmap_r2.pdf,57e20620ad8084645a004a1d3caa737f31b98ff1f7cb4e7eb553984afb2ad75d,56335,Historical mean R2 heatmap CSV,Source available
+SI S6,si_heatmap_mae.pdf,696031152119938db777a8510bd17c5f7fbd20f41012b1abe8b48406a686c0ae,47171,Historical mean MAE heatmap CSV,Source available
+SI S7,si_heatmap_spearman_rho.pdf,20a082156225d9fcc68f7f436ae6529a50d5b96c79c4e62a6a53a452ad32e4a8,52859,Historical mean Spearman rho heatmap CSV,Source available
+SI S8,si_heatmap_kendall_tau.pdf,a4b17a9e6fd797aced78b53672e1a614a307af6da66fd0893a2ac508daea4db8,51976,Historical mean Kendall tau heatmap CSV,Source available
+SI S9,si_heatmap_top_5pct_overlap.pdf,8ec26356418715f3bb5dfe32918c2b3695517de4d686a55e91aed682d3cb012a,49892,Historical top-5% true-reference recovery heatmap CSV,Source available; overlap is not predicted-list Jaccard
+SI S10,si_heatmap_top_5pct_enrichment.pdf,db67eff8c56cb51e14485f85fe5ba8aaaf35497e6410ed86cda02e4b8e9dc04e,49339,Historical top-5% enrichment heatmap CSV,Source available
+SI S11,si_v7_error_vs_screening_rank_clean.pdf,3745e3621a9606c3b2ed186559abc673061b04a16585cb2cbf6d107101e26140,154522,Historical error-vs-rank CSV,Source available
+SI S12,si_variance_decomposition.pdf,a8e07af36beeabd3e27ee9658772f04a66183ceb764c54889e01e84b6dda40ce,30264,Historical metric variance decomposition CSV,Source available
+SI S13,v6_topology_fold_heterogeneity.pdf,d92e84e1b7db2ad426eec34e242b035577813ca5505f0ddb32af0b0989fd37ec,18945,Five saved topology-fold scores and plotting/replot_v6_controls.py,Aggregate plot; not refitting

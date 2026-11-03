@@ -1,0 +1,27 @@
+name: Verify frozen V6 figure assets and compact aggregates
+
+on:
+  push:
+    paths:
+      - 'manuscript/v6/**'
+      - 'revision_v6/public_release/**'
+      - '.github/workflows/verify-v6-public-figures.yml'
+  pull_request:
+    paths:
+      - 'manuscript/v6/**'
+      - 'revision_v6/public_release/**'
+      - '.github/workflows/verify-v6-public-figures.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate figure checksums, LaTeX paths and stored aggregates
+        run: python revision_v6/public_release/verify_public_release.py

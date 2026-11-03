@@ -1,0 +1,545 @@
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,margin=2.0cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype,setspace}
+\usepackage{amsmath,amssymb,bm}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{booktabs,longtable,array,tabularx,multirow}
+\usepackage{graphicx,float,enumitem,hyperref,caption,subcaption,authblk}
+\usepackage[table]{xcolor}
+% Revision markup works with the default Overleaf pdfLaTeX compiler.
+% Set \highlightfalse to suppress all revision shading.
+\usepackage{soul}
+\colorlet{RevisionHighlight}{yellow!55}
+\sethlcolor{RevisionHighlight}
+\soulregister\citep7
+\soulregister\citet7
+\soulregister\ref7
+\soulregister\url7
+\newif\ifhighlight
+\highlighttrue
+\ifdefined\CleanVersion\highlightfalse\fi
+\NewDocumentCommand{\add}{+m}{\ifhighlight\hl{#1}\else#1\fi}
+\NewDocumentCommand{\addeq}{+m}{%
+  \ifhighlight
+    \[\colorbox{RevisionHighlight}{\(\displaystyle #1\)}\]
+  \else\[#1\]\fi
+}
+\newcommand{\revtableon}{\begingroup\ifhighlight\rowcolors{1}{RevisionHighlight}{RevisionHighlight}\fi}
+\newcommand{\revtableoff}{\endgroup}
+\newcommand{\del}[1]{}
+\newcommand{\delnote}[1]{}
+% ============================================================
+\usepackage{booktabs}
+\setstretch{1.08}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5.5pt}
+\setlength{\emergencystretch}{3em}
+\setlist[itemize]{leftmargin=1.4em,itemsep=2pt,topsep=2pt}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\newcommand{\figmain}{figures}
+\newcommand{\uptakeunit}{mmol g$^{-1}$}
+\newcommand{\etal}{\textit{et al.}}
+\renewcommand{\refname}{References}
+
+\title{\textbf{The Validation Split Defines the Discovery Claim in AI-Guided MOF Screening}}
+
+\author[1,\dag,*]{Mehrdad Asgari}
+\author[2,\dag]{Shayan Abaei}
+\author[1]{Angelo Di Bella}
+\author[1]{Andre Hadji-Thomas}
+\author[3]{Hosein Alimardani}
+
+
+\affil[1]{Lucy Cavendish College, University of Cambridge, Cambridge, United Kingdom}
+\affil[2]{School of Chemical Engineering, Faculty of Engineering, University of Tehran, Tehran, Iran}
+\affil[3]{Faculty of Engineering, University of Tehran, Tehran, Iran}
+\affil[*]{Corresponding author. E-mail: \href{mailto:ma2000@cam.ac.uk}{ma2000@cam.ac.uk}}
+\date{}
+
+\begin{document}
+\maketitle
+\noindent \dag\ These authors contributed equally.\\
+\noindent * Correspondence should be addressed to Dr Mehrdad Asgari.\\[0.5em]
+
+
+\section*{Abstract}
+\del{Machine learning is becoming a gatekeeper for metal--organic framework (MOF) discovery, but its credibility depends on whether validation matches the chemistry of deployment.}\add{Machine-learning (ML) models can prioritize metal--organic frameworks (MOFs) for adsorption screening, but their reported accuracy depends on the train/test partition.} A controlled, database-scale adsorption benchmark is used to isolate validation design as the scientific variable by holding targets, descriptors, model classes, hyperparameter logic, and metrics fixed while comparing random, geometry-, metal-cluster-, functional-group-, linker-, and topology-held-out splits for CO$_2$ and CH$_4$ uptake. Random, geometry-, functional-group-, and linker-held-out evaluations support broadly similar conclusions, whereas metal-cluster and especially topology holdouts reveal substantially harsher transfer regimes. For CO$_2$ uptake at 0.15 bar, random-forest performance falls from $R^2=0.758$ under random splitting to 0.267 under topology grouping, while \add{unweighted mean fold-local top-5\% recovery} falls from 62.2\% to 37.6\%. \add{These results show why a shortlist supported by random-split accuracy alone is not a reliable proxy for selection under unseen topology labels.} \add{A targeted revised-autocorrelation (RAC) chemistry-proxy control further shows that descriptor additions can help some unseen topology families and worsen others; feature enrichment is not a universal remedy for transfer error.}
+
+\textbf{Keywords:} metal--organic frameworks; machine learning; validation strategy; out-of-distribution generalization; materials screening; reproducibility
+
+
+\newpage
+
+\section*{Introduction}
+Metal--organic frameworks (MOFs) are among the most chemically programmable classes of porous solids: metal nodes, organic linkers, functional groups, topology, pore shape, and electrostatics can be varied almost independently. This modularity is why MOFs remain central to adsorption, separation, gas storage, catalysis, and chemical sensing, but it is also why purely experimental exploration is intrinsically incomplete. Large-scale hypothetical screening and computation-ready experimental databases first made MOF discovery a database-scale problem rather than a sequence of isolated case studies \citep{Wilmer2012LargeScale,Chung2014CoREMOF,Chung2019CoRE2019}. Machine learning (ML) now complements synthesis and adsorption measurement by rapidly triaging enormous candidate spaces, while recent data-driven studies and reviews have highlighted the importance of descriptor design, benchmark construction, and reproducible screening logic \citep{Boyd2019DataDriven,Jablonka2020BigDataPorous,Moosavi2020RoleMLMaterials}. In parallel, application-focused ML studies have shown how this infrastructure can accelerate adsorption and separation analysis when its assumptions are reported clearly \citep{Altintas2021MLMOF,Shi2020HTCSMLMOF}.
+
+
+Recent anomaly-detection studies in MOF chemical space have shown that edge-of-manifold structures can be chemically interpretable rather than merely statistical mistakes \citep{Alimardani2026CHEMAD}. That perspective motivates a complementary reliability question: when an ML model promotes an unusual or high-performing MOF, has the model been tested for the kind of chemical transfer implied by that recommendation? Without this distinction, a random-split success can be misread as evidence for prospective reticular discovery, and a top-ranked material can appear actionable even when its status collapses under a harder chemical holdout.
+
+The bottleneck is therefore not only whether an ML model can fit a tabulated adsorption value. The more consequential issue is whether the validation protocol matches the scientific decision that will be made from the prediction. Random train/test splits ask an interpolation question: can the model predict structures sampled from approximately the same database neighbourhood as the training set? Many screening decisions ask a different question: should a model be trusted when it ranks an unfamiliar node, linker family, functional motif, pore regime, or topology? These are distinct materials-discovery claims, and they can lead to different conclusions even when the data, descriptors, models, and metrics are unchanged \citep{Fernandez2014MLCO2MOFs,Bucior2019EnergyDescriptors}.
+
+This distinction is especially important for adsorption because target physics changes what transfer means. Low-pressure CO$_2$ uptake can be sensitive to electrostatics, polar motifs, open-metal environments, and narrow-pore chemistry, whereas high-pressure methane uptake is often more closely related to accessible pore volume, density, and available adsorption space. A single random-split $R^2$ cannot tell whether a model has learned transferable structure--property relationships or has benefited from local similarity to near-neighbour training examples. Molecular informatics has long recognized this issue through temporal, scaffold, and benchmark-specific splits \citep{Sheridan2013TimeSplit,Wallach2018Memorization,Wu2018MoleculeNet}. The same principle now applies to materials informatics: generalization is not a universal property of an algorithm, but a property of a defined deployment task and its data geometry \citep{Koh2021WILDS,Li2025OODMaterials}. \add{This principle predates the present benchmark. MatFold formalized chemically and structurally motivated validation splits for materials discovery, while BOOM benchmarked out-of-distribution molecular-property prediction across tasks and models \citep{Witman2025MatFold,Antoniuk2025BOOM}. Our study does not claim to invent group-based validation. Its specific contribution is to compare five MOF-relevant grouping labels under matched adsorption targets, descriptors and models, then quantify the consequences for actual candidate recovery and shortlist composition.}
+
+\add{Following scaffold-based evaluation in molecular ML \citep{Wu2018MoleculeNet}, we compare holdouts defined by MOF-specific metadata. For example, a random test may include a topology seen in training; a topology holdout excludes all structures bearing that label from the training fold. Out-of-sample (OOS) predictions are made only for structures excluded from the corresponding fit. We concatenate the outer-test prediction rows, average repeated random predictions for each structure, and compare shortlists only on structure IDs shared by the two strategies (see Methods).}
+
+\add{We therefore test six partition rules against identical adsorption targets and model families: random interpolation, imported geometry-ID holdout (upstream clustering unknown), metal-cluster, functional-group, linker, and topology holdouts. Their performance is evaluated both as prediction error and as recovered high-uptake candidates, without claiming that any partition is universally preferable.}
+
+ARC--MOF provides a suitable test bed because it combines a large, diverse MOF collection, \add{density functional theory (DFT)}-derived electrostatic-potential-fitted charges, adsorption targets, and descriptor tables suitable for immediate ML workflows \citep{Burner2023ARCMOF}. The broader relevance is not limited to ARC--MOF. Computation-ready experimental resources such as CoRE MOF DB, quantum-chemistry-oriented resources such as QMOF, and chemically verified simulation resources such as MOSAEC-DB all sharpen the same question: when databases contain recurring families, related topologies, duplicated chemistries, or near-neighbour structures, a random split can reward local interpolation while saying little about prospective transfer to unfamiliar reticular chemistry \citep{Chung2014CoREMOF,Chung2019CoRE2019,Rosen2021QMOF,Zhao2025CoREMOF,Gibaldi2025MOSAEC}. We therefore use ARC--MOF for the matched benchmark, while formulating the output as a portable validation framework that can be layered onto future MOF and porous-material screening studies.
+
+\del{Topology is a useful stress test because it is a compact label for framework connectivity, design lineage, pore-network constraints, and sometimes synthetic family, even though it is not a complete mechanistic descriptor of adsorption.}\add{Topology labels identify groups of structures sharing a framework-connectivity assignment; withholding a complete group tests whether prediction transfers to structures with a topology not observed in training.} Recent perspectives on MOF topology emphasize both its power and its limitations as a language for comparing framework architectures \citep{Glasby2024Topology}. \del{We therefore use topology grouping not to claim that topology alone controls gas uptake, but to impose a severe structural-extrapolation stress test.}\add{Topology-based withholding is a stringent validation condition, not evidence that topology independently controls adsorption.} Likewise, metal-cluster, linker, functional-group, and geometry groupings define complementary deployment questions. Together they create a validation map rather than a single score.
+
+
+\add{The MOF-specific contribution is to connect split-dependent prediction errors with the materials selected for follow-up. We compare adsorption targets across five metadata holdouts, examine errors within named families and individual structures, and quantify recovery and membership of predicted top-5\% lists on shared candidate populations. These analyses test the reliability of retrospective screening recommendations; the proposed follow-up rules have not been prospectively validated.}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{\figmain/Figure1_Main.pdf}
+\caption{\textbf{Validation split as a discovery claim in AI-guided MOF screening.} The workflow treats split strategy as the controlled scientific variable. Data assembly combines ARC--MOF-derived adsorption targets with grouped metadata for geometry, metal clusters, functional groups, linkers, and topology. The benchmark design then holds targets, descriptor families, models, hyperparameter logic, and metrics fixed while varying the train/test regime. Model outputs are translated into accuracy loss, rank sensitivity, elite-list survival, high-error held-out groups, and \add{structural examples linked to source-data identifiers}. The final output is a validation framework that connects each reported score to a chemical transfer claim and each promoted candidate to an auditable routing decision.}
+\label{fig:workflow}
+\end{figure}
+
+\add{Figure~\ref{fig:workflow} distinguishes interpolation performance, held-out-group prediction, and candidate selection. The following results quantify each separately rather than treating a single random-split score as sufficient evidence for unfamiliar MOFs.}
+
+
+
+
+\begin{center}
+\begin{minipage}{0.94\textwidth}
+\small
+\renewcommand{\arraystretch}{1.18}
+
+\refstepcounter{table}
+\label{tab:split_family_chemistry_map}
+\textbf{Table~\thetable. Definition and interpretation of the split families.}
+\del{Random splitting tests interpolation within the same database neighbourhood, whereas grouped splits hold out chemically or structurally defined families to probe transfer across pore regimes, node environments, local motifs, linker families, or framework connectivity. Each split family therefore defines a different validation regime and a different discovery claim.}\add{Random splitting tests prediction within the same database population, whereas grouped splits withhold all structures sharing a particular label. The labels, rather than individual descriptor thresholds, define the holdout groups. Random uses five ShuffleSplit repeats with a 20\% test fraction (seed 42); grouped evaluations use five GroupKFold folds after label-specific missing-value and singleton filtering. The eligible sizes are 185,113 (geometry), 255,502 (metal cluster), 198,212 (functional group), 202,532 (linker), and 263,744 (topology), compared with the 263,744-row random population. These are unequal training/test problems, not equal-sized partitions; construction and sensitivity controls are documented in Methods and the SI group-construction table.}
+
+\medskip
+
+\begin{tabular}{p{0.20\textwidth} p{0.34\textwidth} p{0.38\textwidth}}
+\toprule
+\textbf{Split family} &
+\textbf{Chemistry-facing question} &
+\textbf{Interpretation in this benchmark}
+\tabularnewline
+\midrule
+
+Random &
+Can the model interpolate within the same database neighbourhood? &
+Baseline interpolation regime. Useful for measuring in-distribution prediction, but not sufficient by itself for discovery claims involving unfamiliar chemistry.
+\tabularnewline
+
+Geometry-grouped &
+\add{Which external geometry-group labels are absent from model training?} &
+\del{Pore-regime holdout. Interpretable through PLD, LCD, density, void fraction, accessible surface area, and pore-volume descriptors.}\add{Holdout of imported geometry-group IDs. These IDs may be described using pore descriptors, but the upstream grouping features and distance thresholds are not recoverable.}
+\tabularnewline
+
+Metal-cluster-grouped &
+Can the model transfer to unfamiliar node chemistry or coordination environments? &
+Node-family holdout. Chemistry-facing because metal identity, local coordination, charge distribution, and node environment can affect adsorption.
+\tabularnewline
+
+Functional-group-grouped &
+Can the model transfer to unfamiliar local chemical motifs? &
+Local-motif holdout. Relevant to polar groups, heteroatoms, electrostatics, and low-pressure adsorption environments.
+\tabularnewline
+
+Linker-grouped &
+Can the model transfer to unfamiliar organic scaffold families? &
+Linker-family holdout. A framework-solid analogue of scaffold splitting in molecular ML, adapted to modular MOF chemistry.
+\tabularnewline
+
+Topology-grouped &
+Can the model transfer to unfamiliar framework connectivity and pore-network architecture? &
+Severe structural-extrapolation holdout. \del{It is not a claim that topology alone controls uptake; it is a stress test for connectivity, design lineage, and pore-network transfer.}\add{All members of a topology label are withheld from training; poor scores indicate difficulty on that held-out family, not proof that topology itself causes adsorption.}
+\tabularnewline
+
+\bottomrule
+\end{tabular}
+
+\end{minipage}
+\end{center}
+\medskip
+
+
+\del{This framing defines the logic of the remaining results and discussion in the following section: regression metrics test predictive accuracy, shortlist metrics test screening actionability, and held-out-group or structural audits test whether the error modes are chemically inspectable.}\add{The results below separately report prediction error, the fraction of truly high-uptake structures found in a predicted shortlist, and differences between the candidate lists. The grouping labels determine which structures are withheld; they are not automatically used as model inputs. Most main-text models use geometric descriptor columns, and the alternate topology-containing descriptor variants are reported separately in the SI.}
+
+
+\section*{Results and discussion}
+\subsection*{Data coverage defines the chemical audit space}
+The benchmark uses an ARC--MOF-derived adsorption table with four gas-loading targets and grouped metadata for geometry, metal clusters, functional groups, linkers, and topology labels. ARC--MOF is appropriate for this study because it provides a large, diverse, descriptor-ready MOF collection with DFT-derived electrostatic-potential-fitted charges and precomputed descriptors for ML workflows \citep{Burner2023ARCMOF}. The resulting analysis is deliberately a validation-regime benchmark rather than a process-optimization study: CO$_2$ uptake at 0.15 bar is used as an adsorption-relevant anchor target, not as a complete carbon-capture or separation-performance metric. \add{The adsorption targets are originally obtained through molecular simulation, and grand-canonical Monte Carlo (GCMC) can be used directly to evaluate candidate MOFs at scale \citep{Wilmer2012LargeScale,Boyd2019DataDriven,Burner2023ARCMOF}. A surrogate is therefore not indispensable for calculating an already-simulable uptake value. ML is studied here as a fast prioritization step when many repeated candidate rankings are considered; its usefulness depends on the cost of a wrong shortlist relative to direct simulation. Additional GCMC for an unseen family is a valid alternative to relying on the extrapolative ML prediction.}
+
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Dataset coverage used for the split-strategy benchmark.} Rows denote non-null entries for each target or metadata component after identifier normalization and row-preserving joins into the 263,744-row working table. Coverage is computed relative to the master ARC--MOF-derived adsorption table.}
+\label{tab:coverage}
+\begin{tabular}{lrr}
+\toprule
+Component & Rows & Coverage \\
+\midrule
+master adsorption table & 263,744 & 100.0\% \\
+geometry group labels & 263,744 & 100.0\% \\
+metal-cluster group labels & 256,328 & 97.2\% \\
+functional-group labels & 214,531 & 81.3\% \\
+linker group labels & 256,328 & 97.2\% \\
+topology labels & 263,744 & 100.0\% \\
+CO$_2$ uptake at 0.015 bar & 263,744 & 100.0\% \\
+CO$_2$ uptake at 0.15 bar & 263,744 & 100.0\% \\
+CH$_4$ uptake at 5.8 bar & 263,744 & 100.0\% \\
+CH$_4$ uptake at 65 bar & 263,744 & 100.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:coverage} shows that all four uptake targets are available for the full 263,744-row working table, whereas metadata coverage differs across split families. Geometry and topology labels are available for all rows, metal-cluster and linker labels cover 97.2\% of rows, and functional-group labels cover 81.3\%. Thus, the grouped-split comparisons should be interpreted as matched benchmark tests within the available label coverage for each grouping scheme, not as evidence that every metadata source has identical completeness. This distinction is important because grouped-split severity is a joint property of the group definition, non-null label coverage, group-size distribution, descriptor-space shift, and target physics. The SI therefore provides group-size diagnostics (Figure~S1), target distributions (Figure~S2), prediction scatter panels (Figure~S3), and PLD-decile error summaries (Figure~S4), so that model error can be interpreted alongside data-regime severity.
+
+
+In this validation-framework framing, the metadata columns in Table~\ref{tab:coverage} define the chemical audit space of the benchmark. A topology label makes it possible to ask whether a model transfers across framework connectivity; a metal-cluster label makes it possible to ask whether node-family context transfers; linker and functional-group labels test organic-scaffold and local-motif transfer; and \del{geometry labels test pore-regime transfer}\add{geometry labels test transfer across the imported metadata groups, whose upstream cluster construction is unavailable}. Missing or incomplete labels therefore do not merely reduce table completeness; they delimit which chemical transfer claims can be audited for a given split family. For this reason, grouped-split results are interpreted together with label coverage, group-size imbalance, and the SI diagnostics rather than as interchangeable train/test partitions.
+
+
+Throughout the article, CO$_2$ uptake at 0.15 bar is used as the anchor target because it is an adsorption-relevant readout that can reflect both pore accessibility and local affinity; it is not used as a complete carbon-capture process metric. Random forest (RF) is used as the main-text reference model because it is a strong and transparent baseline for tabular MOF descriptors, while the SI retains the full model suite. Two descriptor families are emphasized: compact geometry descriptors, which contain directly interpretable pore and framework properties such as density, \add{pore-limiting diameter (PLD)}, \add{largest cavity diameter (LCD)}, accessible surface area, pore volume, and void fraction; and enriched interpretable descriptors, which add simple geometric ratios and interaction terms. Machine-readable group IDs are retained in source-data tables for traceability, but the main text and figures use \del{chemistry-facing audit labels}\add{group descriptions} wherever possible.
+
+
+\subsection*{Random-split accuracy is not a universal measure of MOF generalization}
+\add{In the performance figures, recovery is the fraction of the simulated-uptake top 5\% recovered by the predicted top 5\% within each outer test set, averaged equally across five folds. Later shortlist comparisons instead use one common candidate population and distinguish reference recovery from agreement between predicted lists.}
+Figure~\ref{fig:splitseverity} compares the anchor target, CO$_2$ uptake at 0.15 bar, chosen as an adsorption-relevant but not process-complete readout, using random forest (RF) models as the main-text reference case. Figure~\ref{fig:splitseverity}a reports mean $R^2$ across split families for compact geometry descriptors, which contain directly interpretable pore and framework properties, and enriched interpretable descriptors, which add simple geometric ratios and interaction terms; Figure~\ref{fig:splitseverity}b reports the corresponding mean absolute error (MAE). The qualitative message is consistent across both descriptor families: random, geometry-grouped, functional-group, and linker-grouped evaluation lead to broadly similar conclusions, whereas metal-cluster grouping is harder and topology grouping imposes the strongest extrapolation penalty in this anchor setting. All-model support is provided in the SI and benchmark summary tables. \add{The small separations among random, geometry, functional-group and linker results do not support a claim that these three grouping schemes each produce a large failure. The unusually large topology penalty is an especially demanding diagnostic under this database and grouping rule, not proof that topology validation must be used in every adsorption-screening application.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{\figmain/figure2_v8_split_family_severity_polished.pdf}
+\caption{\textbf{Split-family severity for the anchor CO$_2$ uptake target.} Random forest (RF) performance is shown for CO$_2$ uptake at 0.15 bar using compact geometry and enriched interpretable descriptor families. (a) Mean $R^2$ indicates that random, geometry-grouped, functional-group, and linker-grouped splits support broadly similar conclusions, whereas metal-cluster grouping reduces accuracy and topology grouping produces the largest extrapolation penalty. (b) Mean absolute error gives the same conclusion on the physical uptake scale: topology-grouped folds yield the largest MAE for both descriptor families. \del{Error bars denote fold-level variability from the benchmark pipeline.}\add{Error bars show $\pm 1$ standard error of the mean (SEM) across the five outer-fold scores, computed as the sample SD divided by $\sqrt{5}$.}}
+\label{fig:splitseverity}
+\end{figure}
+
+The compact numerical summary in Table~\ref{tab:anchor_summary} illustrates the magnitude of this split effect. For enriched interpretable descriptors, RF random-split performance is $R^2 = 0.758$ with MAE $=0.280$ mmol g$^{-1}$; topology-grouped evaluation decreases to $R^2 = 0.267$ and MAE $=0.464$ mmol g$^{-1}$. Metal-cluster grouping is intermediate ($R^2 = 0.650$, MAE $=0.349$ mmol g$^{-1}$). The enriched descriptors improve the random and moderate grouped regimes relative to compact geometry, but they do not remove the topology-holdout penalty. Thus, adding interpretable geometric features can improve interpolation and near-family transfer, while the validation regime can still materially change the scientific conclusion.
+
+Targeted final-estimator refits quantify the training--held-out gap without repeating hyperparameter selection. For compact geometry, mean $R^2_{\rm train}-R^2_{\rm heldout}$ increases from 0.102 under random splitting to 0.490 under topology grouping; the corresponding positive MAE deterioration, $\mathrm{MAE}_{\rm heldout}-\mathrm{MAE}_{\rm train}$, increases from 0.064 to 0.181 mmol g$^{-1}$. For enriched interpretable descriptors, the mean $R^2$ gap increases from 0.098 to 0.590 and MAE deterioration from 0.066 to 0.256 mmol g$^{-1}$. Training $R^2$ remains high for the enriched model under both random (0.856) and topology-grouped (0.855) validation, whereas topology-held-out $R^2$ is 0.265. The topology penalty is therefore a genuine structured generalization gap rather than a consequence of globally poor model fit. \add{It is not uniform across individual topologies: in the full anchor-target evaluation, the \texttt{fsc} group (45,509 structures) has MAE 0.897 mmol g$^{-1}$ and contributes 33.87\% of pooled absolute error, while the larger \texttt{pcu} group (99,167 structures) has MAE 0.410 and contributes 33.75\%. Group size and per-structure error both matter; the SI separates these contributions.} The 60 refits used exact recovered historical outer memberships and saved fold-specific RF parameters. Held-out reproduction was close overall in the current revision environment, but not exact: the largest $R^2$ difference was 0.011318 for enriched topology fold~2, while its MAE difference was 0.000126 mmol g$^{-1}$; unrecovered historical package versions preclude claiming exact reproduction. Fold-level results are reported in the SI.
+
+As a population-control sensitivity, the enriched-RF anchor analysis was also repeated on the same 214,531 label-complete structures for all six validation strategies, deliberately retaining singleton groups so the candidate universe did not change between strategies. Mean $R^2$ values were 0.764 (random), 0.753 (geometry), 0.745 (functional), 0.747 (linker), 0.647 (metal), and 0.227 (topology); corresponding MAEs were 0.272, 0.277, 0.281, 0.280, 0.339, and 0.463 mmol g$^{-1}$. Thus, fixing the candidate population preserves the validation hierarchy with modest quantitative changes: metal holdout remains harder and topology holdout remains by far the strongest failure regime. Topology folds remain heterogeneous ($R^2$ SD 0.292; MAE SD 0.299 mmol g$^{-1}$), so the mean should not be read as a uniformly precise estimate. Candidate-population differences alone therefore cannot explain the topology-transfer failure.
+
+\add{Training-set size is a separate confounder: the largest topology fold trains on fewer structures than an 80/20 random split. To isolate this difference, five additional strict out-of-sample random-forest controls were fitted, each using exactly the training and test counts of its paired topology fold in the 263,744-structure anchor-target population, with the paired fold's selected RF hyperparameters reused without retuning. Random-minus-topology $R^2$ was positive in all five pairs (mean $+0.4905$), as was the top-5\% recovery difference (mean $+0.2460$). The fold-level MAE differences were not uniform: topology gave lower MAE in two of five folds. The persistent $R^2$ and shortlist-recovery penalties therefore cannot be explained by train/test counts alone, but the comparison does not attribute the full penalty uniquely to topology as a physical variable. Figure~\ref{fig:v6_matched_size} and the SI section on training-size-matched random controls give the individual results.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\textwidth]{\figmain/v6_matched_random_vs_topology.pdf}
+\caption{\add{Training-size-matched random control for enriched RF prediction of CO$_2$ uptake at 0.15 bar. Each random partition matches both the training and test counts of its paired topology fold; training and test structures remain disjoint. (a) Held-out $R^2$, including the negative topology score in fold 1; (b) fold-local top-5\% recovery in percent. Labels report the individual scores. RF settings are taken from each corresponding topology fold, without a new parameter search. The comparison is a size control, not an evaluation on identical test structures.}}
+\label{fig:v6_matched_size}
+\end{figure}
+
+
+Chemically, the difference between random and topology- or metal-cluster-grouped evaluation should be read as the difference between neighbourhood interpolation and family-level transfer. In a random split, related frameworks, related node environments, and nearby pore-regime examples can appear in both training and test folds, allowing geometry-rich descriptors to support smooth interpolation. In a topology or metal-cluster holdout, by contrast, the test fold can remove an entire connectivity family or node-family context from the training neighbourhood. The model must then extrapolate to combinations of pore dimensions, density, local chemistry, electrostatics, and framework connectivity that may not be represented by close analogues in training. The drop from random to topology-grouped performance in Table~\ref{tab:anchor_summary} is therefore not only a decrease in $R^2$ or an increase in MAE; it is evidence that the chemical transfer claim has changed.
+
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Anchor-target RF summary for CO$_2$ uptake at 0.15 bar.} Values are mean benchmark metrics for the RF model using compact geometry and enriched interpretable descriptor families. MAE is reported in mmol g$^{-1}$. \add{Top-5\% recovery is the unweighted mean of fold-local recovery fractions, not the separate global-reference calculation on 177,411 structures. Enrichment is recovery rescaled by the corresponding random-selection baseline and is not independent evidence.}}
+
+\label{tab:anchor_summary}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrr}
+\toprule
+Descriptor & Split & $R^2$ & MAE & Spearman & Top-5\% overlap & Top-5\% enrichment \\
+ &  &  & (mmol g$^{-1}$) &  &  &  \\
+\midrule
+Compact geometry & Random & 0.723 & 0.302 & 0.890 & 0.573 & 11.465 \\
+Compact geometry & Geometry & 0.706 & 0.323 & 0.888 & 0.549 & 10.971 \\
+Compact geometry & Metal-cluster & 0.627 & 0.362 & 0.821 & 0.504 & 10.069 \\
+Compact geometry & Functional-group & 0.718 & 0.299 & 0.889 & 0.565 & 11.299 \\
+Compact geometry & Linker & 0.719 & 0.309 & 0.889 & 0.560 & 11.197 \\
+Compact geometry & Topology & 0.252 & 0.471 & 0.698 & 0.385 & 7.694 \\
+Enriched interpretable & Random & 0.758 & 0.280 & 0.900 & 0.622 & 12.440 \\
+Enriched interpretable & Geometry & 0.739 & 0.301 & 0.898 & 0.595 & 11.893 \\
+Enriched interpretable & Metal-cluster & 0.650 & 0.349 & 0.827 & 0.531 & 10.611 \\
+Enriched interpretable & Functional-group & 0.749 & 0.280 & 0.898 & 0.606 & 12.124 \\
+Enriched interpretable & Linker & 0.751 & 0.288 & 0.898 & 0.602 & 12.043 \\
+Enriched interpretable & Topology & 0.267 & 0.464 & 0.699 & 0.376 & 7.517 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+
+\add{The relatively small differences among random, geometry-, functional-, and linker-grouped evaluation are not presented as evidence that these splits independently remove unfamiliar pore regimes or chemical environments. In the executed geometry protocol, the pipeline imported \texttt{cluster\_id} from an external \texttt{geo-clusters.csv}, excluded 78,631 singleton labels, and used five-fold GroupKFold on 185,113 remaining structures in 67,780 groups (median two structures; maximum 26). Fully 83.23\% of retained groups have two or three structures, representing 69.96\% of eligible structures. The grouping-file generator, features, and thresholds are unavailable; withholding these small labels need not remove geometrically close training examples. This is a descriptive explanation consistent with the modest fold-score differences, not a causal attribution. The cohorts also have different eligibility filters; a separate 214,531-structure fixed-universe comparison controls that population difference (SI group-size tables).}
+
+These results place a clear boundary on what random-split accuracy can mean in MOF screening. A random split can support confidence within a familiar database neighbourhood, but it cannot by itself justify claims of transfer to new framework connectivities, metal-node environments, linker families, functional motifs, or pore regimes. A chemically meaningful benchmark must therefore pair model performance with the deployment regime being tested and with the stability of the candidate shortlist that will drive follow-up decisions. The validation split is consequently not a neutral preprocessing choice: it links each numerical score to a specific chemical transfer claim and each promoted material to \del{an auditable decision pathway}\add{a documented follow-up decision}.
+
+
+\subsection*{Adsorption target physics changes split sensitivity}
+\add{The gas and pressure pairs test target dependence, not a uniquely identified adsorption mechanism. Enriched-RF mean topology-holdout $R^2$ is 0.182 for CH$_4$ at 5.8 bar and 0.947 at 65 bar (random: 0.763 and 0.982), versus 0.128/0.267 for CO$_2$ at 0.015/0.15 bar. Recovered original topology predictions now establish identical structure IDs and fold assignments at all four targets ($N=263{,}744$ each), permitting matched per-MOF residual analysis (SI).}
+
+Figure~\ref{fig:target_sensitivity} extends the analysis to CO$_2$ at 0.015 bar, CO$_2$ at 0.15 bar, CH$_4$ at 5.8 bar, and CH$_4$ at 65 bar using enriched interpretable descriptors and RF. \add{The heat map reports the unweighted mean of five outer-fold $R^2$ scores for each target--split combination; these scores are distinct from the paired error correlations below.}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{\figmain/figure3_revised_single_panel.pdf}
+\caption{\textbf{Target-dependent sensitivity to split family.} \add{Unweighted mean outer-fold $R^2$ heat map for enriched interpretable descriptors and RF across four adsorption targets.} CO$_2$ at 0.015 bar, CO$_2$ at 0.15 bar, and CH$_4$ at 5.8 bar show large topology-grouped penalties, whereas CH$_4$ at 65 bar is much less sensitive. The comparison is interpreted as target-dependent validation sensitivity, not as a microscopic adsorption-mechanism assignment.}
+\label{fig:target_sensitivity}
+\end{figure}
+
+The target dependence is chemically informative, but it should be interpreted as a benchmark-level pattern rather than as a mechanistic proof. CO$_2$ uptake at 0.015 bar, CO$_2$ uptake at 0.15 bar, and CH$_4$ uptake at 5.8 bar show large penalties under topology grouping; relative to random splitting, the topology-grouped decrease is approximately $-0.43$ to $-0.58$ in $R^2$ for the most sensitive targets. Low-pressure CO$_2$ uptake is expected to be especially sensitive to strong adsorption sites, electrostatics, polar motifs, and narrow-pore environments, so topology or node-family holdouts can be punishing when those local environments are absent from the training neighbourhood. CO$_2$ uptake at 0.15 bar is a useful adsorption-relevant anchor because it can reflect both pore accessibility and local affinity, but it remains a validation target rather than a complete post-combustion capture metric. CH$_4$ uptake at 5.8 bar occupies an intermediate regime in which confinement and pore-size matching can still matter, whereas CH$_4$ uptake at 65 bar remains high across split families, consistent with high-pressure methane loading being more closely associated with transferable pore-volume, density, and available-adsorption-space information. These patterns show that the validation regime interacts with the physical character of the target; assigning microscopic adsorption mechanisms would require additional site-level simulation, molecular analysis, or experiment. 
+
+
+\add{We compared errors on identical held-out MOFs across CO$_2$ 0.015/0.15 bar and CH$_4$ 5.8/65 bar using the recovered original topology-fold predictions. Absolute errors were normalized by each target's full-cohort uptake interquartile range (IQR), not by individual uptake. Within-structure normalized absolute-error Spearman correlations were $\rho=0.745$ for the CO$_2$ pressure pair and $0.339$ for the CH$_4$ pair, but only $-0.063$ for CO$_2$ 0.15 versus CH$_4$ 65 bar. The highest-error deciles shared 16,411 of 26,375 MOFs for the CO$_2$ pair but only 1,576 for CO$_2$ 0.15 versus CH$_4$ 65 bar. In full-cohort family summaries, the MAE/IQR values for \texttt{fsc} were 1.748/0.943/0.578/0.082, respectively; \texttt{rna} showed 2.203/0.880/0.439/0.086. These paired descriptive associations vary with gas and pressure and do not identify a causal adsorption mechanism (SI historical-recovery tables).}
+
+\add{We also fitted a focused chemistry-proxy control using six predeclared RAC features added to the original 20-feature enriched RF. Both models were compared on the same 256,328 RAC-covered ARC--MOF structures (97.19\% coverage), with identical topology folds, train-only preprocessing, and no hyperparameter retuning; 7,416 unmatched structures were excluded from both sides. At CO$_2$ 0.15 bar, RACs improved $R^2$ and MAE in three of five folds but worsened both in two. The mean fold-paired changes were $\Delta R^2=-0.290$, $\Delta\mathrm{MAE}=+0.09165$ mmol g$^{-1}$, even though mean fold-local top-5\% recovery rose by 0.0617. The \texttt{pts} and \texttt{rna} families suffered large error increases, and that adverse pattern also occurred at CO$_2$ 0.015 bar. RACs are local chemistry proxies, not partial charges or direct electrostatic descriptors. Their mixed effects rule out any claim that simply adding these six features reliably fixes topology transfer; all fold results, including negative cases, appear in the SI.}
+
+\subsection*{Descriptor-space shift helps diagnose split-family severity}
+Figure~\ref{fig:shift} uses descriptor-space shift diagnostics to contextualize grouped-split severity. Figure~\ref{fig:shift}a plots centroid shift distance, a simple measure of how far the held-out group lies from the training data in descriptor space, against $R^2$ and shows a broad negative association, indicating that descriptor-space coverage contributes to split difficulty. Figure~\ref{fig:shift}b summarizes standardized Wasserstein shift, which compares train and test feature distributions, by split family, with metal-cluster and topology regimes producing the largest shifts. Figure~\ref{fig:shift}c shows a \add{principal component analysis (PCA)} projection, used only as a two-dimensional visualization of descriptor-space coverage, illustrating that some held-out groups can occupy visibly distinct regions. These diagnostics should be interpreted as evidence of distributional stress, not as a complete causal explanation of prediction error.
+In the split-severity decomposition, topology grouping and metal-cluster grouping show the strongest distributional stress among the grouped regimes, with topology grouping also giving the largest random-to-grouped performance loss in the exported decomposition table. This supports the interpretation that topology- and node-family holdouts combine chemical-family transfer with descriptor-space shift, rather than representing interchangeable statistical partitions.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{\figmain/figure6_v8_shift_and_descriptor_space_polished.pdf}
+\caption{\textbf{Descriptor-space shift helps diagnose why split families are not interchangeable.} (a) Larger centroid shift is broadly associated with lower $R^2$, suggesting that grouped-split severity partly reflects descriptor-space coverage. (b) Mean standardized Wasserstein shift is comparatively small for random, geometry-grouped, functional-group, and linker-grouped splits but larger for metal-cluster and topology grouping. (c) PCA projection of descriptor space illustrates that specific held-out groups can occupy separated regions. PCA is used only for visualization, not as a model input.}
+
+\label{fig:shift}
+\end{figure}
+
+For MOF ML, Figure~\ref{fig:shift} cautions against treating all grouped splits as equivalent. Geometry grouping, linker grouping, metal-cluster grouping, functional-group grouping, and topology grouping encode different deployment questions and impose different forms of descriptor-space shift. A topology hold-out is a severe structural-extrapolation stress test; a metal-cluster hold-out probes node or cluster transfer; a \del{geometry hold-out probes pore-regime transfer}\add{geometry hold-out tests imported group IDs, without verifying a particular geometric threshold}. These regimes are complementary rather than redundant. At the same time, the topology-grouped penalty should not be interpreted as a statement that topology alone mechanistically determines adsorption. It is a combined stress test involving topology-label granularity, group-size imbalance, descriptor coverage, descriptor-space shift, and target sensitivity. Reporting these regimes together gives readers a more honest map of where the model is reliable and where extrapolation becomes fragile.
+
+
+\add{An additional nearest-training-geometry diagnostic on the 177,411 common-OOS MOFs used eight original geometric features, imputing and scaling them from the topology-fold training side only. Surprisingly, even the closest-distance quartile (44,353 structures) has topology MAE 0.6426 mmol g$^{-1}$, with 22.17\% of its errors exceeding 1 mmol g$^{-1}$; in the farthest quartile, MAE is 0.1990 mmol g$^{-1}$. Pooled distance--error Spearman $\rho=-0.3834$ is negative, not evidence that more distant test MOFs necessarily fail harder. Topology-family composition is a substantial confounder, so proximity alone neither explains nor causally determines the error. The SI reports quartiles and representative families.}
+
+\subsection*{High-error held-out groups identify concrete extrapolation regimes}
+\add{The geometry-group identifiers in Figure~\ref{fig:hardgroups} are labels from the supplied grouping table, not numeric ranges or combinations written in the figure. They should be read with the corresponding group-size, pore-dimension, and error tables in the SI. A high-error group shows failure on that held-out subset; it does not independently identify a unique pore-size mechanism.}
+
+
+A grouped split is valuable not only because it is harder, but because it identifies where prediction error concentrates when a chemical family is removed from the training neighbourhood. Figure~\ref{fig:hardgroups} reports the held-out groups with the largest mean absolute error for the anchor CO$_2$ target. Each row is a held-out group summarized over multiple structures, not an individual MOF. Figure~\ref{fig:hardgroups}a isolates geometry-grouped hold-outs, \del{which are interpreted as pore-regime transfer tests}\add{which withhold externally assigned geometry IDs rather than verified broad pore-size bins}, while Figure~\ref{fig:hardgroups}b summarizes high-error chemistry- and topology-grouped regimes, including node-family and connectivity hold-outs. For readability, high-error groups are referred to using \del{chemistry-facing audit labels}\add{group descriptions}, while the exact machine-readable IDs are retained in parentheses, source-data tables, and the SI structural-audit section and label-translation table. The purpose is not to label individual MOFs as intrinsically poor or promising; it is to identify which group definitions create auditable extrapolation regimes.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{\figmain/figure5_revised_uniform_markers.pdf}
+\caption{\textbf{High-error held-out groups behind split severity.}
+(a) Geometry-grouped hold-outs produce measurable but comparatively moderate mean absolute errors for the anchor CO$_2$ uptake target. \add{Their external group identifiers were withheld intact, but the upstream clustering rule is unavailable; the panel does not establish transfer across verified pore-size thresholds.} (b) Chemistry- and topology-grouped regimes reveal larger high-error audit groups, including node-family, linker-family, and functional-family hold-outs. For readability, the figure uses chemically interpretable audit labels, such as the Cu$_2$O$_8$N$_2$--BDC node-family group, while exact machine-readable source IDs are retained in the exported source-data, the SI label-translation table, and the SI structural-audit section. Chemically specific names are used only when supported by filename-encoded node/linker tokens; otherwise, conservative labels such as functional-family or imported geometry-ID group are used. The plot converts an aggregate grouped-split penalty into auditable group-level error regimes that motivate the structural audit examples in Figure~\ref{fig:structural_audit} and guide targeted data inspection or future data acquisition.}
+
+
+\label{fig:hardgroups}
+\end{figure}
+
+The group-level error analysis prevents the benchmark from remaining a purely aggregate statistical statement. \add{An exact topology-label error decomposition shows that the fsc and pcu cohorts account for 33.9\% and 33.7\% of the pooled absolute prediction error, respectively, although they differ greatly in cohort size (45,509 and 99,167 structures) and MAE (0.897 and 0.410 mmol g$^{-1}$). Thus error concentration combines cohort prevalence with per-structure difficulty (SI subsection on topology-fold heterogeneity). Excluding the 3,898 evaluation rows labeled \texttt{other} changes pooled topology MAE from 0.45712 to 0.45706 mmol g$^{-1}$; this is an evaluation-population sensitivity using unchanged fitted models, not a retraining test of the category-merging decision (SI subsection on rare-topology evaluation exclusion).} Figure~\ref{fig:hardgroups}a indicates that the hardest geometry-grouped hold-outs occupy a moderate MAE range, whereas Figure~\ref{fig:hardgroups}b shows that several chemistry- and topology-grouped regimes exceed this range substantially. In Figure~\ref{fig:hardgroups}b, the highest-error reader-facing node-family label is the Cu$_2$O$_8$N$_2$--BDC group, retained in the source tables as metal-cluster ID~2157. This group is already difficult under random splitting and becomes more severely underpredicted under metal-cluster and topology grouping. In the matched metal-cluster hold-out shown in Figure~\ref{fig:hardgroups}, it has MAE = 6.496 mmol g$^{-1}$; in the broader SI hard-group table, the same source ID reaches MAE = 6.911 mmol g$^{-1}$ under topology grouping, with mean target uptake = 8.182 mmol g$^{-1}$ and mean prediction = 1.271 mmol g$^{-1}$. The corresponding random-split audit row also remains high-error, with MAE = 5.099 mmol g$^{-1}$. This pattern should therefore be read as a high-error audit group whose behaviour is amplified under grouped holdout, not as proof that grouped splitting alone causes the error. In the uploaded metal-cluster metadata, the group shares filename-encoded Cu$_2$O$_8$N$_2$ and BDC\_A tokens, supporting its interpretation as a Cu-based node-family audit group rather than as an arbitrary numerical label. Determining whether this regime reflects unusual local adsorption physics, charge-assignment sensitivity, simulation artefacts, or an outlying source-data regime would require additional structure-level and simulation-level inspection beyond the present benchmark.
+
+
+\add{The rare-topology sensitivity was also checked using global pooled metrics on the preserved-model evaluation rows. Excluding the 3,898 \texttt{other} structures changed global $R^2$ from 0.453222 to 0.452850 and global-reference top-5\% recovery from 0.250607 to 0.249673, alongside the negligible pooled-MAE difference. These are evaluation-population comparisons, not fold-local averages or an experiment retraining the model with uncollapsed labels (SI subsection on rare-topology evaluation exclusion).}
+
+The representative rows used for structural follow-up are documented in the SI and deposited with the source-data package in the project repository. These rows are diagnostic examples of split-induced high error or shortlist transition rather than candidate recommendations. To make the group-level audit chemically inspectable, Figure~\ref{fig:structural_audit} shows three CIF-based structure examples selected from the saved case-study outputs. These examples connect group-level errors to concrete framework geometries, descriptor summaries, and prediction-level audits while remaining diagnostic rather than prescriptive.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{\figmain/Figure_main_structural_audit_grouped_extrapolation_v7_final.pdf}
+\caption{\textbf{Representative structural audit cases from grouped extrapolation.}
+Three CIF-based diagnostic cases are shown for CO$_2$ uptake at 0.15 bar. Each row contains a framework view, a descriptor summary, and a prediction audit comparing the true uptake with random-split and grouped-split predictions. Case A shows severe underprediction for a topology-grouped pcu Cu framework from the Cu$_2$O$_8$N$_2$--BDC node-family audit group, which is retained in the source tables as metal-cluster ID~2157; the listed descriptors indicate a moderate pore window and low accessible void fraction rather than a simple large-pore/high-surface-area case. \add{Case B is a geometry-grouped dia example: its imported group label was withheld from training, but the unavailable upstream clustering recipe prevents assigning a specific pore-size-regime boundary.} Case C shows a large-pore tbo framework that remains close to the true uptake under random splitting but is strongly demoted under topology grouping, illustrating shortlist dropout. These examples are designed as diagnostic audits rather than candidate recommendations: they connect abstract grouped-split penalties to inspectable framework geometries, descriptor regimes, and candidate-selection consequences, but they are not best-MOF candidates, process-optimal sorbents, or mechanistic proof that topology alone controls uptake.}
+\label{fig:structural_audit}
+\end{figure}
+
+
+Figure~\ref{fig:structural_audit} provides the structural counterpart to the group-level error analysis in Figure~\ref{fig:hardgroups}. The three cases illustrate different ways in which a grouped hold-out can change the screening conclusion. In Case A, the topology-grouped model strongly underpredicts a pcu Cu framework belonging to the Cu$_2$O$_8$N$_2$--BDC node-family audit group. Because this source group is already high-error under random splitting, Case A should be read as a high-error audit case whose error is amplified under grouped evaluation, not as proof that the grouped split alone creates the error. In Case B, the geometry-grouped dia framework shows a large increase in error relative to the random-split prediction, \add{illustrating a difference between random and imported geometry-group validation, without assigning a known physical threshold to that group.} In Case C, the key consequence is not only increased absolute error but shortlist dropout: the structure is close to the true value under random splitting but is demoted far down the list under topology grouping. These examples make the benchmark auditable at the structure level while remaining diagnostic examples rather than material recommendations.
+
+The structural audit therefore supports the central validation-framework message: grouped-split penalties and shortlist instability correspond to concrete, inspectable frameworks, but they do not by themselves establish process-level material optimality or a single microscopic cause of adsorption error.
+
+
+\subsection*{Shortlist stability determines \del{screening actionability}\add{candidate-selection reliability}}
+\add{Throughout, a top-5\% candidate list means the $k=\lceil0.05N\rceil$ structures with the highest predicted uptake on a specified test population; a reference top-5\% list uses the true simulated uptake. "Recovery" is the fraction of reference candidates present in the predicted list, while "Jaccard" is the intersection of two predicted lists divided by their union. Enrichment is recovery divided by the random-selection rate $k/N$ (approximately 5\%); it is not a third independent measure of accuracy.}
+
+\del{In many MOF discovery studies, the operational output of an ML model is not a single predicted value but a shortlist of candidates selected for follow-up simulation, synthesis prioritization, or process-level filtering. Shortlist stability is therefore a screening-actionability metric: it asks whether the same materials would be promoted when the validation regime changes from interpolation to a chemically structured holdout. Figure~\ref{fig:screening} evaluates this question for the anchor CO$_2$ target. Figure~\ref{fig:screening}a reports top-5\% recovery, defined as the fraction of the true top-5\% materials recovered by the predicted top-5\% list; Figure~\ref{fig:screening}b reports enrichment, defined as the recovery advantage relative to random selection.}\add{Because screening uses predicted values to select specific MOFs for further calculations or experiments, we compare the candidates selected under each split rather than relying on overall accuracy alone. Figure~\ref{fig:screening} shows mean fold-local top-5\% recovery and its enrichment over random selection for CO$_2$ at 0.15 bar.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{\figmain/figure4_revised_percent.pdf}
+\caption{\textbf{Screening consequences of split choice for the anchor CO$_2$ target.} RF screening metrics are shown for CO$_2$ uptake at 0.15 bar using compact geometry and enriched interpretable descriptor families. (a) \add{Unweighted mean fold-local} top-5\% recovery is displayed as a percentage and drops most strongly under topology grouping. (b) \add{Enrichment over random selection is the same fold-local recovery divided by the 5\% random-selection baseline (approximately a 20-fold rescaling); it is not independent evidence.} \add{Error bars show $\pm 1$ standard error of the mean (SEM) across the five outer-fold scores, computed as the sample SD divided by $\sqrt{5}$.}}
+\label{fig:screening}
+\end{figure}
+
+\del{For enriched interpretable descriptors, the unweighted mean of fold-local RF recovery is 62.2\% under random splitting versus 37.6\% under topology grouping (Table~\ref{tab:anchor_summary}); these are not the common-population global-reference recoveries. The corresponding enrichment decreases from 12.44 to 7.52. These values remain well above random selection, so topology grouping does not make the model useless as a coarse screening tool. However, the screening claim changes substantially. Under random splitting, the model appears suitable for prioritizing a high-uptake shortlist within a familiar database neighbourhood. Under topology grouping, the same model becomes less reliable for selecting the exact materials that should move forward under severe structural extrapolation. This distinction is central for high-throughput MOF screening because practical decisions are usually made from shortlists, not from average error over the full database. The candidate identities and held-out-family errors are compared below.}\add{For enriched RF, mean fold-local top-5\% recovery falls from 62.2\% under random splitting to 37.6\% under topology holdout (Table~\ref{tab:anchor_summary}). Enrichment correspondingly falls from 12.44 to 7.52. Topology holdout still performs better than random selection, but its lower recovery cautions against using the random-split result to justify selecting MOFs from previously unseen topology families. The global common-population comparison below addresses a different question: which particular candidates are recovered.} 
+
+
+\add{Recovered \emph{original} random RF fold predictions resolve the historical averaging question. Five saved fold files contain 263,745 outer-OOS predictions for 177,411 unique MOFs; their per-MOF means reproduce the archived averages to within $8.9\times10^{-16}$ mmol g$^{-1}$. On the fixed $k=8{,}871$ global top-5\% comparison, five seeded choices of one \emph{original} OOS prediction per MOF yielded Jaccard 0.961960--0.963914 relative to the original averaged random list and true-top-5\% recovery 0.618194--0.619547 versus 0.620223 for the average. This is a seeded selection-sensitivity diagnostic from existing predictions, not five independent refits or a claim of zero variability. The earlier five-fit protocol-matched analysis is now secondary corroboration (SI).}
+
+\subsection*{Elite-list identity changes even when global rank agreement remains high}
+\del{The most important screening result is that global rank agreement and exact elite-list identity can diverge. In a high-throughput MOF workflow, the practical decision is often not whether the full database is approximately rank ordered, but which specific candidates are promoted for follow-up simulation, synthesis prioritization, or process-level filtering. Figure~\ref{fig:elite}a reports top-5\% Jaccard overlap, defined as the intersection divided by the union of two predicted elite lists, between pairs of split-family predicted shortlists, while Figure~\ref{fig:elite}b reports the corresponding global prediction-rank Spearman correlations. This comparison separates broad ranking similarity from the identity of the actionable shortlist.}\add{Figure~\ref{fig:elite} compares two properties of the predicted candidate lists: their top-5\% Jaccard overlap (panel a) and their overall Spearman rank correlation (panel b). Models can rank the full population similarly while selecting rather different MOFs at the top.}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{\figmain/figure7_revised_spearman_0_1.pdf}
+\caption{\textbf{Elite-list identity can change despite broad rank agreement.} Exact pairwise comparisons are shown for CO$_2$ uptake at 0.15 bar using enriched interpretable descriptors and RF. (a) Top-5\% Jaccard overlap is lowest whenever topology grouping is involved. (b) Global prediction-rank Spearman correlations remain high; the axis spans the natural 0--1 range. The contrast shows why global rank metrics alone are insufficient for screening claims.}
+\label{fig:elite}
+\end{figure}
+
+Table~\ref{tab:elite_exact} quantifies this distinction using exact disk-based aggregation from full prediction files. For enriched interpretable descriptors and RF on CO$_2$ uptake at 0.15 bar, random and topology-grouped predictions have a global Spearman correlation of 0.917, yet their top-5\% predicted elite lists have a Jaccard overlap of only 0.200. At the top-1\% level, the Jaccard overlap decreases to 0.066. Thus, the two prediction sets preserve broad rank agreement while disagreeing strongly on the most selective candidate shortlist. This is not a minor statistical nuance: practical screening decisions usually act on shortlists, not on the average ordering of the full database. Elite-list stability should therefore be reported as a first-class benchmark output alongside regression accuracy and rank correlation. \add{A separate global-reference evaluation on the 177,411-structure random/topology common outer-OOS population uses the 8,871 structures with highest reference uptake as the single true top-5\% set. Random predictions recover 62.02\% of this global reference set, whereas topology-grouped predictions recover 24.83\%. Each predicted list has 8,871 structures: 2,953 appear in both, 5,918 only in the random list, and 5,918 only in the topology list. These global-reference recovery values must not be substituted for the earlier 62.2\% and 37.6\% unweighted averages of fold-local recovery; Jaccard measures agreement between two predicted lists, not their accuracy against the reference. Details are in the SI subsection on global-reference shortlist recovery.}
+
+\add{A descriptive same-structure residual comparison on these 177,411 common OOS MOFs finds a smaller absolute error from the aggregated random predictions for 74.27\% of structures and from the topology predictions for 25.73\%. The mean and median per-structure topology-minus-random absolute-error differences are 0.178323 and 0.076952 mmol g$^{-1}$, respectively. This is not a causal same-training-data control: each random prediction is an average of one to five outer-OOS appearances, whereas the topology prediction is single-valued. The same-ID family table in the SI shows that this difference is not confined to a few outliers: within \texttt{fsc} ($N=30,486$), \texttt{pcu} ($N=66,999$), and \texttt{rna} ($N=9,923$), the random estimate has the lower absolute error for 78.8\%, 76.9\%, and 79.8\% of structures, respectively. The paired definition and family-specific results are documented in the SI table of family-specific paired errors.}
+
+\add{The composition of the top-5\% lists is likewise asymmetric. Among the 2,953 shared candidates, 54.86\% belong to the true simulated-uptake top 5\%; this fraction is 65.60\% among 5,918 random-only candidates but 9.85\% among 5,918 topology-only candidates. The random-only set is dominated by the \texttt{fsc} topology label (90.1\%), whereas \texttt{pcu} is the largest reported topology label in the topology-only set (58.4\%). These are retrospective descriptions of the common OOS population, not predictions of future experimental adsorption or independent estimates of repeat-to-repeat list stability (SI shortlist-composition table).}
+
+\add{The actual simulated CO$_2$ uptakes support this membership distinction: the random-only shortlist has mean (median) uptake 3.594 (3.550) mmol g$^{-1}$, compared with 1.865 (1.695) mmol g$^{-1}$ for topology-only candidates; the shared set has 3.369 (3.370) mmol g$^{-1}$. The corresponding interquartile ranges, dominant topology families, and geometric-property summaries are given in the SI tables on shortlist uptake/composition and geometric properties. These retrospective comparisons describe the candidates selected by the archived OOS predictions, not expected performance under an independent deployment study.}
+
+
+\add{Pairwise common-$N$ counts in Table~\ref{tab:elite_exact} arise from intersections of saved OOS prediction IDs, not from the metadata-availability counts in Table~\ref{tab:coverage}; the SI states the exact filtering rule.}
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Exact elite-list stability for CO$_2$ uptake at 0.15 bar with enriched interpretable descriptors and RF.} Jaccard overlap is computed between predicted elite lists from full prediction files after intersecting the structures common to each pair of split-family prediction outputs. Common $n$ is therefore comparison-specific and reflects the exact pairwise prediction-output intersection, not the metadata coverage values in Table~\ref{tab:coverage}. Top-$k$ is computed from the listed common set. The table distinguishes global rank agreement from exact shortlist identity: high Spearman correlation can coexist with low elite-list overlap, especially for topology-involving comparisons.}
+\label{tab:elite_exact}
+\scriptsize
+\begin{tabular}{llrrrrr}
+\toprule
+Comparison & Elite fraction & Common $n$ & Top-$k$ & Jaccard overlap & Global Spearman \\
+\midrule
+Random vs Geometry & 1\% & 124,444 & 1,245 & 0.632 & 0.994 \\
+Random vs Geometry & 5\% & 124,444 & 6,223 & 0.788 & 0.994 \\
+Random vs Geometry & 10\% & 124,444 & 12,445 & 0.835 & 0.994 \\
+Random vs Metal-cluster & 1\% & 171,821 & 1,719 & 0.506 & 0.964 \\
+Random vs Metal-cluster & 5\% & 171,821 & 8,592 & 0.670 & 0.964 \\
+Random vs Metal-cluster & 10\% & 171,821 & 17,183 & 0.729 & 0.964 \\
+Random vs Functional-group & 1\% & 133,407 & 1,335 & 0.633 & 0.992 \\
+Random vs Functional-group & 5\% & 133,407 & 6,671 & 0.783 & 0.992 \\
+Random vs Functional-group & 10\% & 133,407 & 13,341 & 0.830 & 0.992 \\
+Random vs Linker & 1\% & 136,233 & 1,363 & 0.679 & 0.992 \\
+Random vs Linker & 5\% & 136,233 & 6,812 & 0.785 & 0.992 \\
+Random vs Linker & 10\% & 136,233 & 13,624 & 0.836 & 0.992 \\
+Random vs Topology & 1\% & 177,411 & 1,775 & 0.066 & 0.917 \\
+Random vs Topology & 5\% & 177,411 & 8,871 & 0.200 & 0.917 \\
+Random vs Topology & 10\% & 177,411 & 17,742 & 0.372 & 0.917 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection*{Using shortlist disagreement to guide follow-up}
+\add{A worked decision rule illustrates the intended use. Consider a CO$_2$ 0.15-bar MOF from the \texttt{fsc} topology that appears in the random-predicted top 5\% but not the topology-predicted top 5\%. The saved comparison shows that \texttt{fsc} constitutes 90.1\% of this random-only list, whereas the \texttt{fsc} topology holdout has relatively high absolute error. Such a candidate is not automatically discarded, but its random-only nomination should be checked by a direct adsorption simulation or a new family-specific measurement before prioritizing synthesis. Candidates selected by both protocols may be prioritized for verification but are not experimentally validated by shortlist agreement. This is proposed decision guidance; no prospective synthesis or new candidate-level GCMC validation was carried out.}
+
+\add{Table~\ref{tab:reporting_checklist} summarizes the reporting information needed to judge a screening shortlist: target, training/test group membership, prediction error, recovery against simulated uptake, and identity of selected structures.}
+
+\begin{table}[H]
+\centering
+\caption{\textbf{Reporting requirements for MOF screening predictions.} \add{Report the intended transfer task, the candidate population, reference recovery, predicted-list agreement, and the source data supporting family or structure-level examples.}}
+\label{tab:reporting_checklist}
+\small
+\begin{tabular}{p{0.23\textwidth}p{0.32\textwidth}p{0.36\textwidth}}
+\toprule
+Item & Why it matters & Minimum recommended reporting \\
+\midrule
+Interpolation baseline & Establishes how well the model performs within the database neighbourhood. & Random-split $R^2$, MAE, RMSE, rank metrics, and fold/repeat definition. \\
+\add{Held-out group definition} & Defines the chemical transfer claim being tested. & Group label definition, held-out regime, group-size distribution, label coverage, and missing-label handling. \\
+Target-specific response & Adsorption targets emphasize different physical drivers and target scales. & Metrics reported separately for each gas/loading condition; no target averaging that hides sensitivity. \\
+\add{Reference-candidate recovery} & Screening decisions act on candidates, not only on average error. & Top-$k$ or top-fraction recovery, enrichment over random selection, and elite-list overlap. \\
+\add{Predicted-list agreement} & High global rank agreement can hide a different actionable shortlist. & Jaccard overlap, common candidate-universe size, top-$k$ definition, and global rank correlation. \\
+\add{Family-level errors} & Converts aggregate extrapolation loss into inspectable chemistry. & Worst groups with label, support, mean error, target mean, prediction mean, and representative structures where possible. \\
+\del{Candidate-routing label}\add{Candidate follow-up} & \del{Converts validation outcome into an action.}\add{Indicates whether independent checks are needed.} & \del{validation-stable, validation-fragile, apparent-elite, or inspection-needed label with recommended next step.}\add{Use shared versus split-specific top-5\% membership. Shared nominations warrant verification; random-only and topology-only nominations warrant extra scrutiny. Neither is a validated performance class.} \\
+Source-data traceability & Allows readers to redraw and audit figures without rerunning all models. & CSV source data for main-text and SI figures and tables, plus a manifest linking plots to files. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\add{For proposed follow-up, prioritize independent checks of split-specific candidate nominations before synthesis or process evaluation. No prospective success rate for this rule was measured.}
+
+
+
+\section*{Conclusions}
+\del{This study establishes a simple but consequential principle for AI-guided MOF screening: the validation split defines the discovery claim.}\add{This ARC--MOF benchmark shows that the support for a screening claim depends on which families were excluded when model performance was measured.} Under a matched benchmark design, random, geometry-grouped, functional-group, and linker-grouped evaluations give broadly similar conclusions for the ARC--MOF adsorption tasks, whereas metal-cluster and especially topology holdouts reveal harsher reticular-transfer regimes. The effect is target dependent, with high-pressure CH$_4$ uptake comparatively robust in this benchmark and lower-pressure or intermediate-pressure targets more sensitive to chemically structured holdouts.
+
+\add{The clearest practical consequence is candidate selection: on 177,411 common OOS structures, random and topology-ranked lists agree on only 2,953 of 8,871 candidates each, despite broad overall rank agreement. This matters when the shortlisted structures determine further simulation or experimental effort.}
+
+\del{The proposed validation framework converts this observation into a reusable standard.}\add{The practical reporting recommendation is to describe the intended test population alongside accuracy and shortlist results.} A MOF ML study should state the intended transfer regime, report shortlist survival, disclose high-error held-out groups, and provide source-data-backed structural audits for the regimes that drive candidate decisions. Random-split performance remains valuable as an interpolation baseline, but it should not be used alone to support claims about unfamiliar nodes, linkers, topologies, functional motifs, or pore regimes. By linking each metric to a chemical transfer claim and each promoted material to a routing decision, validation becomes part of the materials-discovery evidence rather than a final numerical score.
+
+
+\section*{Scope and limitations}
+\add{These results quantify the effect of the chosen partition protocol within one database; they do not establish that topology is the only source of extrapolation error. A laboratory or computational project can deliberately acquire new GCMC labels for withheld framework families, which may reduce the gap. No such active-learning or external-validation campaign is claimed in the present revision.}
+
+The benchmark is designed to test how validation regime changes MOF ML conclusions. The adsorption targets therefore serve as controlled, physically interpretable screening readouts rather than as stand-alone process rankings. This choice is deliberate: the validation framework should sit upstream of application-specific filters such as selectivity, working capacity, heat management, water and thermal stability, transport, regeneration energy, kinetics, synthesis feasibility, and cycle modelling. In a practical screening campaign, those filters should be applied after the validation regime has made clear whether the candidate claim is interpolation, node transfer, topology transfer, or another form of reticular extrapolation.
+
+The grouped splits should likewise be interpreted as deployment-regime tests. Topology grouping is a severe structural-extrapolation stress test; metal-cluster, linker, functional-group, and geometry groupings probe complementary node-family, scaffold, motif, and \del{pore-regime transfer claims}\add{imported geometry-label transfer tests}. The structural audit cases are diagnostic examples that connect split-induced errors to inspectable frameworks and candidate decisions. They are not proposed as process-optimal sorbents, and they do not assign a single causal mechanism to topology, node chemistry, or geometry alone. \add{The present evidence is drawn from one ARC--MOF-derived dataset and does not establish transfer of the numerical effect sizes to independently constructed MOF databases. The baseline descriptors are predominantly geometric. A six-RAC chemistry-proxy control on the common covered subset gave strongly family-dependent results, including poorer transfer for some topologies at both CO$_2$ pressures. These features do not test explicit electrostatic charges. The work also contains no matched independent-database validation.}
+
+
+\section*{Computational methods}
+\subsection*{Data assembly}
+The pipeline ingests a cleaned ARC--MOF-derived adsorption table and split-family metadata files \citep{Burner2023ARCMOF}. The required local inputs are \texttt{clean\_data.csv}, \texttt{geo-clusters.csv}, \texttt{mc-clusters.csv}, \texttt{func-clusters.csv}, and \texttt{flig-clusters.csv}; optional inputs include \texttt{geometric\_properties.csv} and \texttt{all\_topology\_lists.csv}. When \texttt{clean\_data.csv} is not already present, the supplied pipeline can construct it from ARC--MOF-derived raw files, including \texttt{geometric\_properties.csv}, \texttt{post\_comb\_vsa-CO2.csv}, and \texttt{methane.csv}, together with grouped metadata labels. Structure identifiers are normalized before merging to reduce false mismatches across adsorption, descriptor, cluster-label, and topology tables.
+
+
+Coverage values in Table~\ref{tab:coverage} report non-null entries for each target or metadata component relative to the 263,744-row working table. Memory-safe sampled prediction tables are used only for point-level diagnostics and representative SI plots; they are reported separately from the full working table and from exact full-prediction post-processing. Fold-level metrics, held-out-group summaries, and exact elite-list comparisons are regenerated from the benchmark pipeline and associated prediction registry rather than inferred from the sampled diagnostic table.
+
+
+\subsection*{Descriptor families}
+Two main descriptor families are emphasized. Compact geometry has eight inputs: Density, ASA, AVA, AVAf, POAVA, $D_i$ (LCD), $D_f$ (PLD), and Dif. Enriched interpretable has 20 inputs: those eight, four additional raw geometric quantities (NASA, POAVAf, unit-cell volume, and vASA), and eight executed engineered columns. With $\epsilon=10^{-9}$, these are $D_i/(D_f+\epsilon)$, ASA$/(\mathrm{AVA}+\epsilon)$, AVAf$/(\mathrm{Density}+\epsilon)$, $\log(1+\max(D_i,0))$, $\log(1+\max(D_f,0))$, POAVA$\times D_f$, Density$\times D_f$, and \texttt{cavity\_window\_gap}. The executed historical definition of \texttt{cavity\_window\_gap} is exactly Dif; it is not $D_i-D_f$ and therefore duplicates an existing raw input. Topology-only has one raw categorical input, and geometry-plus-topology has 21 raw inputs before fold-dependent one-hot expansion. The complete input order and definitions are given in the SI \citep{Fernandez2014MLCO2MOFs,Bucior2019EnergyDescriptors}.
+
+\subsection*{Split families}
+The benchmark compares repeated random splits with chemically or geometrically grouped hold-outs. Random splits use repeated shuffle splitting with a 20\% test fraction and therefore estimate interpolation within the ARC--MOF-derived data distribution. Grouped splits use fold assignments in which all structures sharing the same group label are held out together, preventing members of the same group from appearing simultaneously in training and test folds. The grouped split families are geometry-grouped, metal-cluster-grouped, functional-group, linker-grouped, and topology-grouped. \add{The grouping labels originate from the corresponding metadata tables (\texttt{geo-clusters.csv}, \texttt{mc-clusters.csv}, \texttt{func-clusters.csv}, \texttt{flig-clusters.csv}, and the topology-label table). In particular, the geometry split is implemented from its assigned group identifier, rather than by separately withholding each PLD, LCD, density, or surface-area interval listed as model descriptors in Table~\ref{tab:split_family_chemistry_map}. The input metadata and group counts are provided in the SI; thresholds for a hypothetical independently re-binned geometry split are not part of the executed protocol. \texttt{geo-clusters.csv} was supplied externally to the executed pipeline; its upstream generator, clustering variables, and thresholds were not found in the available project. The implemented holdout is therefore a group-ID holdout, not a verified holdout of predefined broad geometric bins.}
+
+Rows lacking the group label required for a given grouped split family were excluded from that specific grouped-split evaluation after label coverage was recorded. In the submitted benchmark, groups represented by a single structure were then removed separately within each grouped cohort before GroupKFold. Consequently, label availability and final modelled cohort size differ: geometry 263,744 labelled/185,113 eligible rows, metal 256,328/255,502, functional 214,531/198,212, linker 256,328/202,532, and topology 263,744/263,744. Raw group counts and eligible group counts were respectively 146,411/67,780, 2,447/1,621, 43,744/27,425, 125,220/71,424, and 47/47. Crystalnet topology categories with fewer than 50 rows were mapped to \texttt{other} before splitting (3,898 rows; 47 final topology groups). Full missing-label, singleton, and group-size distributions are reported in the SI.
+
+The goal is not to rank split families as universally better or worse; rather, each defines a different generalization question. \del{Geometry grouping tests pore-regime transfer}\add{Geometry grouping tests imported group-label holdout (the generating clustering rule is unavailable)}, metal-cluster grouping tests node or cluster transfer, functional-group grouping tests motif transfer, linker grouping tests organic-family transfer, and topology grouping tests a severe structural-extrapolation regime. Because grouped-split severity also depends on group-size imbalance, label granularity, descriptor coverage, and target sensitivity, grouped splits are interpreted as complementary deployment-regime tests rather than as mechanistic causal claims.
+
+Random splits were generated with \texttt{ShuffleSplit} using five outer repeats, a 20\% test fraction, and seed 42. Grouped evaluations used five outer \texttt{GroupKFold} folds. For the separate fixed-universe sensitivity, all 214,531 structures complete for the five grouping labels were used as the identical starting population for every strategy and singleton groups were deliberately retained; this differs from the submitted benchmark protocol and prevents split-specific population pruning.
+
+
+Accordingly, the grouped splits are not treated as a hierarchy of difficulty or as a claim that one chemical label is universally more important than another. They are operational definitions of different transfer claims: a result obtained under topology grouping supports a different claim from a result obtained under metal-cluster, linker, functional-group, geometry, or random splitting.
+
+
+\subsection*{Models and hyperparameter fitting}
+The model suite contains Ridge regression, random forests, histogram gradient boosting, and multilayer perceptrons implemented through scikit-learn-compatible workflows \citep{Pedregosa2011ScikitLearn}. Ridge regression provides the linear control model, random forests provide the bagged-tree baseline, and histogram gradient boosting provides the boosted-tree comparator \citep{Hoerl1970Ridge,Breiman2001RandomForests,Friedman2001GreedyFunction}. Numerical features are imputed and scaled where appropriate; categorical features are one-hot encoded with safeguards against excessive cardinality. All preprocessing steps must be fitted within the training portion of each split and then applied to the corresponding held-out data, so that imputation, scaling, and categorical encoding do not use test-fold information. Hyperparameter grids are intentionally lightweight to make the benchmark reproducible; the same hyperparameter logic is used across split families so that the validation regime, rather than tuning effort, remains the controlled variable. The main-text figures are RF-centred because RF provides a strong, transparent, non-neural baseline for tabular MOF descriptors, while the SI and exported tables retain all model classes. This fold-local preprocessing rule is essential because global imputation, scaling, or categorical encoding before split construction would leak information from the held-out chemical family into the training workflow. For random outer splits, the inner model-selection loop used three-fold shuffled cross-validation within the training data. For grouped outer splits, the inner loop used group-aware cross-validation where enough training groups were available; otherwise, it fell back to ordinary three-fold cross-validation within the training fold. This design avoids leaking held-out test groups into preprocessing or model fitting while keeping tuning effort matched across validation regimes.
+
+For the RF analyses central to this revision, the fixed settings were seed 42, bootstrap sampling, \texttt{max\_samples}=0.70, \texttt{max\_features}=0.70, and \texttt{min\_samples\_leaf}=5; the grid was \texttt{n\_estimators}$\in\{50,80\}$ and \texttt{max\_depth}$\in\{12,20\}$. Inner selection minimized MAE over three folds: shuffled \texttt{KFold} for random outer splits and group-aware \texttt{GroupKFold} for grouped outer splits. Numeric RF inputs were median-imputed inside each training fold. The original run logged Python 3.11.14, but exact historical NumPy, pandas, and scikit-learn versions were not recovered. \add{The V6 runtime reported Python 3.13.13 with NumPy 1.26.4, a combination outside the advertised Python support range for NumPy 1.26. We preserve the recorded environment values without asserting they form a standard, independently reproducible installation; no nonstandard wheel/build record was recovered. The revision artifacts provide saved outputs, source-code requirements, version manifests, and hashes; exact environment recreation remains an acknowledged provenance limitation.} The revision computations used Python 3.13.13, NumPy 1.26.4, pandas 2.3.2, and scikit-learn 1.9.0; these current versions must not be interpreted as the historical environment.
+
+\add{For the V6 training-size control, five new random partitions were generated on the 263,744-row CO$_2$ 0.15-bar anchor population. Each partition exactly matched the paired historical topology fold's train/test counts and reused its selected enriched-RF settings without tuning; all train/test identifiers were strictly disjoint. The control tests sample-count confounding but does not force the random and topology procedures to share the same test identities. The complete paired results and random seeds are recorded in the V6 code/provenance release.}
+
+The conclusions are therefore scoped to classical descriptor-based MOF ML workflows using tabular geometric, chemical, and topological descriptors. Structure-native graph neural networks, pretrained crystal models, and foundation-model representations could change the absolute performance level and should be evaluated in future work, but the central validation question remains the same: the split must match the intended transfer claim.
+
+
+\subsection*{Final reviewer-controlled random and RAC checks}
+\add{For the primary historical aggregation sensitivity, we loaded the five original random RF outer-OOS fold-prediction files and verified that their test IDs, fold metrics and per-MOF mean predictions reproduce the saved benchmark. For each of seeds 20260--20264, one actually observed outer-OOS prediction was selected per MOF, including 108,167 structures with just one available prediction. Each fixed-population list ($N=177{,}411$, $k=8{,}871$) was ranked with descending score and ascending normalized ID for ties and compared with the original per-MOF mean-prediction list and simulated-uptake reference. The separate five-fit protocol-matched sensitivity is reported only as corroboration, because its new predictions differ from the historical archive.}
+
+\add{For the descriptor control, six predeclared revised-autocorrelation (RAC) atom-property chemistry proxies were joined one-to-one by normalized ID, covering 256,328 of 263,744 original structures. For both CO$_2$ pressure targets, the same RAC-complete cases and original topology-fold memberships were used for baseline enriched RF (20 inputs) and enriched RF plus six RAC inputs (26 inputs). Both sides reused the original fold-specific hyperparameters, with missing-feature imputation fitted only on the training split. Fold-local top-5\% recovery uses $k=\lceil0.05N_{\rm test}\rceil$. The six depth-zero features were \texttt{f-chi-0-all}, \texttt{f-Z-0-all}, \texttt{mc-chi-0-all}, \texttt{mc-Z-0-all}, \texttt{f-lig-chi-0}, and \texttt{f-lig-Z-0}: graph-based summaries of atomic electronegativity (\texttt{chi}) and nuclear charge (\texttt{Z}) over framework, metal-centred, and ligand subgraphs, following the revised-autocorrelation representation \citep{Janet2017RAC}. These six predeclared properties test a small chemistry-proxy addition without parameter selection or a broad descriptor search. These new paired, complete-case controls do not replace the full-cohort original benchmark and do not test electrostatic charges. The separate historical-data audit uses all 20 original topology RF fold-prediction files to compare matched MOF errors across four targets. Every target contains the same 263,744 test IDs, so the resulting per-MOF pressure comparisons and full-family statistics do not rely on the earlier sampled family diagnostics.}
+
+\subsection*{Metrics}
+Regression metrics include $R^2$, MAE, root mean square error (RMSE), Spearman rank correlation, and Kendall rank correlation. Screening metrics include top-1\%, top-2\%, top-5\%, and top-10\% recovery, precision, recall, enrichment, normalized discounted cumulative gain, and elite-list Jaccard overlap. These metrics are needed because adsorption-screening studies often use ML predictions to choose candidates for further simulation, synthesis prioritization, or process-level filtering.
+
+For a target-specific held-out set and elite fraction $f$, the true and predicted elite sets contain $k=\lceil fn\rceil$ structures. Recovery is $|T\cap P|/k$, and enrichment is recovery divided by the random hit rate $k/n$. Benchmark $R^2$, MAE, Spearman, Kendall, recovery, and enrichment were computed independently within each outer held-out fold or repeat and then summarized as an unweighted arithmetic mean of the five values. This fold-level benchmark summary is distinct from the exact cross-split elite-list analysis described below.
+
+\subsection*{Distribution-shift and exact post-processing analyses}
+For each split, the pipeline computes descriptor-space shift diagnostics, including centroid distance, mean absolute standardized shift, and standardized Wasserstein shift. PCA is used only as a visualization of descriptor-space coverage and is not used as a model input. Full held-out prediction files are written as per-experiment CSV files and indexed in a prediction registry. Exact post-processing streams these prediction files from disk to compute group-resolved errors, elite-list Jaccard overlap, global prediction-rank correlations, and diagnostic candidate tables without loading all predictions into memory. This design preserves reproducibility while avoiding memory failures on large ARC--MOF-scale outputs. The sampled prediction tables used for visualization are not used as substitutes for exact full-prediction post-processing.
+
+
+All prediction rows entering exact list comparisons were produced only for outer test sets. For each target--descriptor--model--split combination, outer-OOS rows were concatenated and repeated predictions were averaged by \texttt{filename\_norm}. Random splitting supplied one to five OOS predictions for each observed structure and covered 177,411 unique structures; grouped structures generally supplied one prediction. The five random elite sets were neither unioned nor voted. Two split-family aggregate tables were then intersected by structure identifier, ranked on that pairwise common universe, and compared using $k=\lceil f n_{\mathrm{common}}\rceil$. Elite-list stability was quantified as
+\[
+J(A,B)=\frac{|A\cap B|}{|A\cup B|},
+\]
+where $A$ and $B$ are the two predicted elite sets. Global prediction-rank agreement was the Spearman correlation between the two mean-prediction vectors on the same common set. For random versus topology, $n_{\mathrm{common}}=177{,}411$, Spearman $=0.917090$, Top-5\% Jaccard $=0.199675$, and Top-1\% Jaccard $=0.066066$; these values were independently reproduced from the recovered historical OOS aggregates. \add{The five original random outer-OOS fold files have since been recovered. On the identical 177,411-MOF eligible population, original one-score-versus-averaged-score top-5\% Jaccard is 0.961960--0.963914 across five seeded draws, versus random--topology list Jaccard 0.199675. The original per-ID means and original fold metrics agree with the saved historical archive to floating-point precision; see SI historical repeat aggregation.}
+
+\subsection*{Structural audit case selection}
+Representative structural audit cases were selected from the case-study candidate outputs generated by the exact post-processing workflow. Candidate rows were prioritized when they had a large grouped-split absolute error or a large grouped-minus-random error increase, belonged to a high-error held-out group, had complete descriptor metadata, and had a corresponding CIF file that could be parsed and rendered. The selected cases were used only for diagnostic visualization. They were not selected as optimal adsorption materials and were not used to infer a mechanistic causal role for any single topology, metal-cluster label, or geometric descriptor.
+
+
+\section*{Acknowledgements}
+M.A. gratefully acknowledges Lucy Cavendish College, University of Cambridge, for providing a supportive academic environment during this work. The authors declare that they are responsible for all scientific content, analysis, interpretation, and conclusions presented in this manuscript.
+
+Generative AI tools were used during manuscript preparation for language editing, document formatting, and assistance with code/documentation organization. All scientific analyses, numerical results, validation, interpretation, figures, and final text were reviewed and approved by the authors, who take full responsibility for the content.
+
+\section*{Conflict of Interest}
+The authors declare no conflict of interest.
+
+\section*{Author Contributions}
+M.A.: Conceptualization, Formal analysis, Methodology, Supervision, Chemical-engineering interpretation, Project administration, Writing--original draft, Writing--review and editing. S.A.: Conceptualization, Methodology, Validation, Formal analysis, Chemical-engineering interpretation, Writing--original draft, Writing--review and editing. A.D.B.: Conceptualization, Methodology, Investigation, Formal analysis, Visualization, Writing--original draft, Writing--review and editing. A.H.-T.: Methodology, Software, Formal analysis, Validation, Visualization, Writing--original draft, Writing--review and editing. H.A.: Methodology, Validation, Chemical-engineering interpretation, Writing--review and editing. All authors reviewed and approved the final manuscript.
+
+\section*{Data Availability Statement}
+The code, manuscript source files, Supporting Information, regenerated figure files, compact source-data tables, figure/table source-data CSV files, and the processed benchmark input archive supporting this study are publicly available at \url{https://github.com/Asgari-research/mof-chemical-holdouts}. The repository distributes the processed benchmark table as \texttt{data/clean\_data.zip}, which contains \texttt{clean\_data.csv}.
+
+The benchmark is derived from ARC--MOF adsorption and descriptor data. The distributed \texttt{clean\_data.csv} is a processed, machine-learning-ready benchmark table produced through data cleaning, identifier normalization, adsorption-target organization, descriptor preparation, and construction of benchmark inputs; it is not the original ARC--MOF release. Raw ARC--MOF database files, complete CIF archives, the full historical prediction tree, and the large fitted-model archive are not redistributed. Users requiring original ARC--MOF resources should obtain them from the original providers and follow the associated licence and citation requirements.
+
+\add{The repository contains the split-strategy pipeline, fold metrics, selected outer-out-of-sample summaries, validation scripts and numerical traceability records. The recovered original random and four-target topology outputs were independently checked against these records; the full historical prediction tree itself is not redistributed.} \add{The reviewer-computation code and compact numerical results are recorded in draft PR~\#2, \url{https://github.com/Asgari-research/mof-chemical-holdouts/pull/2}. Original-prediction recovery is documented in a separate evidence audit. Aggregate tables can be independently checked, but refitting the RAC models also requires the joined RAC feature inputs and the specified fold populations.} \add{The V6 computational additions and compact recovered historical evidence are archived in the \texttt{revision\_v6/} directory at commit \texttt{ff83785a76f14fb18f2dac455105a892bf29452a} in draft PR~\#2. This deposit includes the original-prediction audit script and compact results, including the complete 47-family by four-target error table. It excludes the original prediction archives, joined RAC inputs and model checkpoints; compact checks do not constitute reproduction of a fresh RF fit.} The original run recorded Python 3.11.14, but exact historical non-Python package versions were not recovered; the later validation environment is therefore reported separately and is not presented as the historical environment. Targeted historical outer-out-of-sample predictions were recovered and used to verify the exact shortlist statistics reported for the anchor analysis.
+
+\section*{Supporting Information}
+Supporting Information associated with this article contains additional input-file documentation, descriptor-family definitions, split-family diagnostics, metric heat maps, variance diagnostics, held-out-group traceability tables, and structural-audit source-data summaries.
+
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+
+\end{document}

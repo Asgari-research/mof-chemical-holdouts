@@ -1,0 +1,10 @@
+{
+  "common_population_n": 177411,
+  "top_k": 8871,
+  "jaccard": 0.19967543444451957,
+  "random_reference_recovery": 0.6202231991883665,
+  "topology_reference_recovery": 0.24833727877353173,
+  "both": 2953,
+  "random_only": 5918,
+  "topology_only": 5918
+}
