@@ -23,6 +23,12 @@ The repository includes `revision_v4/`, containing the targeted validation and r
 
 **Historical reproducibility note.** Exact historical non-Python package versions and the complete fitted-model/prediction archive were not recovered. The V4 environment and recovered OOS evidence are reported explicitly rather than being conflated with the historical environment.
 
+Targeted original outer-OOS prediction files for the CO2 0.15-bar enriched-RF anchor analysis were located and transferred into compact per-structure aggregates. The portable repository does not include the complete historical prediction tree or fitted-model archive, and the compact averages do not retain individual random-repeat predictions.
+
+## V6 reviewer-driven computational update (October 2026)
+
+The `revision_v6/` directory adds saved-data analyses and five bounded training-size-matched random controls. It includes compact scripts, outputs, tests, figures, and provenance records. The main new result is that matching each topology fold's training and test counts does not remove the topology penalty: the random-minus-topology R² advantage is positive in all five paired folds and averages 0.491. See `revision_v6/README.md` for scope and rerun instructions.
+
 ## Repository overview
 
 This repository contains code, documentation, a processed ARC--MOF-derived benchmark table, compact source-data files, and figure-regeneration materials for the split-strategy MOF adsorption benchmark.
@@ -39,9 +45,12 @@ mof-chemical-holdouts/
 ├── LICENSE
 ├── data/
 │   ├── README.md
-│   └── clean_data.csv
+│   └── clean_data.zip
 ├── docs/
 ├── figure_redraw_package_v2/
+├── revision_v4/
+├── revision_v6/
+├── manuscript/v4/
 └── source_data/                  # optional, if compact source-data tables are unpacked here
 ```
 

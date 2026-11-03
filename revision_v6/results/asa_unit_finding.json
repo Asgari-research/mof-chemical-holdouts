@@ -1,0 +1,9 @@
+{
+  "ASA_unit": "angstrom^2 per unit cell",
+  "conversion_performed": false,
+  "gASA_unit": "m^2/g",
+  "historical_feature_used": "ASA",
+  "mass_specific_surface_area_column": "gASA",
+  "reason": "Both columns are present in the source data and contain different values; relabeling is required rather than blind conversion.",
+  "status": "UNIT_LABEL_CORRECTION_REQUIRED"
+}

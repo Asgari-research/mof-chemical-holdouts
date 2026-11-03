@@ -1,0 +1,9 @@
+{
+  "cavity_window_gap_equals_Dif_all_rows": true,
+  "common_universe_checkpoint_count": 30,
+  "common_universe_rows": 214531,
+  "common_universe_unique_ids": 214531,
+  "generalization_checkpoint_count": 60,
+  "historical_pipeline_contains_executed_assignment": true,
+  "status": "PASS"
+}
