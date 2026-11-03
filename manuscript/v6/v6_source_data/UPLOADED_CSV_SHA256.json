@@ -1,0 +1,10 @@
+{
+  "shortlist_composition.csv": {
+    "sha256": "b8a471b4be6d1fdef2e1c80525b79735a37a150dc646000fb9ca703b95a8b399",
+    "bytes": 2637
+  },
+  "shortlist_true_uptake_summary.csv": {
+    "sha256": "a4254dacc08e14551981f00331d2d22776b333a818ffd07bc8e63bf51ec23f29",
+    "bytes": 2050
+  }
+}

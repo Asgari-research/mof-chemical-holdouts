@@ -1,0 +1,9 @@
+metric,min_or_fixed,max_if_range,provenance
+oos_rows,263745,,Original historical audit report
+unique_mofs,177411,,Original historical audit report
+k_true_global_top5,8871,,Original historical audit report
+single_vs_mean_jaccard,0.96196,0.963914,Original historical audit report
+one_score_true_recovery,0.618194,0.619547,Original historical audit report
+averaged_true_recovery,0.620223,,Original historical audit report
+single_vs_mean_membership_symmetric_difference,326,344,Original historical audit report
+single_score_random_vs_topology_jaccard,0.200244,0.201137,Original historical audit report

@@ -1,0 +1,5 @@
+target_a,target_b,N,spearman_normalized_abs_error,shared_top_error_decile,decile_k,provenance
+co2_0015bar,co2_015bar,263744,0.744993,16411,26375,Original historical audit report
+ch4_58bar,ch4_65bar,263744,0.338918,,26375,Original historical audit report
+co2_015bar,ch4_58bar,263744,0.428608,,26375,Original historical audit report
+co2_015bar,ch4_65bar,263744,-0.063297,1576,26375,Original historical audit report

@@ -1,0 +1,42 @@
+{
+  "target_slug": "co2_015bar",
+  "target_column": "uptake(mmol/g) CO2 at 0.15 bar",
+  "master_n": 263744,
+  "rac_unique_ids": 472571,
+  "covered_n": 256328,
+  "missing_n": 7416,
+  "coverage_fraction": 0.9718818247998059,
+  "features_baseline": [
+    "ASA",
+    "AVA",
+    "AVAf",
+    "Density",
+    "Df",
+    "Di",
+    "Dif",
+    "NASA",
+    "POAVA",
+    "POAVAf",
+    "UC_volume",
+    "cavity_window_gap",
+    "density_pld_interaction",
+    "lcd_pld_ratio",
+    "log_lcd_plus1",
+    "log_pld_plus1",
+    "porosity_window_product",
+    "sa_pv_ratio",
+    "vASA",
+    "vf_density_ratio"
+  ],
+  "rac_features_predeclared": [
+    "f-chi-0-all",
+    "f-Z-0-all",
+    "mc-chi-0-all",
+    "mc-Z-0-all",
+    "f-lig-chi-0",
+    "f-lig-Z-0"
+  ],
+  "rac_features_overlap_baseline": [],
+  "rac_exact_duplicate_columns": [],
+  "rac_nonnull_covered": true
+}

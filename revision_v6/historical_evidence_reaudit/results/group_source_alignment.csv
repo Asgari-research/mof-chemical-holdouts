@@ -1,0 +1,5 @@
+group_source,master_column,source_rows,unique_source_ids,evaluated_rows,matched_ids,label_mismatches
+geo-clusters.csv,geo_cluster,521316,521316,263744,263744,0
+mc-clusters.csv,metal_cluster,472571,472571,263744,256328,0
+func-clusters.csv,func_cluster,405633,405633,263744,214531,0
+flig-clusters.csv,linker_cluster,472571,472571,263744,256328,0

@@ -1,0 +1,11 @@
+# LaTeX and reproducible-preview outputs; never replace locked PDFs
+generated_previews/
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.fls
+*.fdb_latexmk
