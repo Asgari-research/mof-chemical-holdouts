@@ -1,3 +1,6 @@
+<!-- ADVANCED_SCIENCE_V6_CURRENT_RELEASE -->
+> **Current Advanced Science V6 revision:** See [V6_PUBLIC_RELEASE_START_HERE.md](V6_PUBLIC_RELEASE_START_HERE.md) for the reviewer-revised main manuscript, Supporting Information, 22 frozen figure PDFs and verification instructions. Older V4 material remains in this repository for historical traceability; the public figures and compact evidence do not replace all original model-training inputs.
+
 # MOF Chemical Holdouts Benchmark
 
 Reproducibility package for the manuscript:
